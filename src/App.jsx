@@ -1,16 +1,14 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+/**
+ * Internal dependencies.
+ */
+import BoardLists from './components/board-lists/board-lists';
 
 function App() {
-  const [count, setCount] = useState(0)
-
-  return (
-    <>
-     <h1>Boardy</h1>
-    </>
-  )
+    return (
+        <>
+           <BoardLists />
+        </>
+    );
 }
 
-export default App
+export default App;

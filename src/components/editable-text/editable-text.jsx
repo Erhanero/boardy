@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const EditableTitle = ({text}) => {
+const EditableText = ({text}) => {
 	const [value, setValue] = useState(text);
 
 	/**
@@ -14,12 +14,12 @@ const EditableTitle = ({text}) => {
 	}
 
 	return (
-		<div className="editable-title">			
-			<h4>{ value }</h4>
+		<div className="editable-text">			
+			<h3>{ value }</h3>
 		
 			<textarea value={value} onChange={handleTextchange}>{ value }</textarea>
 		</div>
 	)
 }
 
-export default EditableTitle;
+export default EditableText;
