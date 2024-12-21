@@ -1,11 +1,12 @@
 const Stack = (props) => {
     const {
-        direction,
+        direction = 'row',
         alignItems,
         justifyContent,
         columnGap = 0,
         rowGap = 0,
         children,
+        style,
     } = props;
 
     return (
@@ -17,6 +18,7 @@ const Stack = (props) => {
                 "--justify-content": justifyContent,
                 "--column-gap": `${columnGap}px`,
                 "--row-gap": `${rowGap}px`,
+                ...style
             }}
         >
             {children}
