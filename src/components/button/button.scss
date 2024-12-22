@@ -16,9 +16,26 @@
 	transition: background-color, color;
 	transition-duration: var(--t-duration);
 	font-weight: 700;
+	box-shadow: 4px 4px 4px -5px rgb(0 128 214 / 27%);
 
 	&:hover {
 		background-color: var(--c-blue);
 		color: var(--c-white);
+	}
+}
+
+//
+// Button blue
+// ==========================================================================
+
+.button--blue {
+	background-color: var(--c-blue);
+	color: var(--c-white);
+	min-width: 20rem;
+	border: 2px solid var(--c-blue);
+
+	&:hover {
+		background-color: var(--c-white);
+		color: var(--c-blue);
 	}
 }
