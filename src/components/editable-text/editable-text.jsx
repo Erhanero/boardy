@@ -1,7 +1,19 @@
-import { useState } from 'react';
+/**
+ * External dependencies.
+ */
+import { useState, useRef, useEffect } from 'react';
+import classNames from 'classnames';
 
-const EditableText = ({text}) => {
-	const [value, setValue] = useState(text);
+const EditableText = ({initialText, className}) => {
+	const [text, setText] = useState(initialText);
+	const textareaRef = useRef(null);	
+	const [textHeight, setTextHeight] = useState('auto');
+
+	useEffect(() => {
+		if (textareaRef.current) {	
+			setTextHeight(textareaRef.current.scrollHeight)		 
+		}
+	  }, [text]);
 
 	/**
 	 * Handle text change.
@@ -10,14 +22,22 @@ const EditableText = ({text}) => {
 	 * @returns {Void}
 	 */
 	const handleTextchange = (e) => {
-		setValue(e.target.value);
+		if (e.target.value == '') {
+			return;
+		}
+		
+		setText(e.target.value);	
 	}
 
 	return (
-		<div className="editable-text">			
-			<h3>{ value }</h3>
+		<div className={classNames("editable-text", className)} style={{ height: textHeight }}>			
+			<h3>{ text }</h3>
 		
-			<textarea value={value} onChange={handleTextchange}>{ value }</textarea>
+			<textarea
+				value={text}
+				onChange={handleTextchange}
+				ref={textareaRef}
+			>{text}</textarea>
 		</div>
 	)
 }
