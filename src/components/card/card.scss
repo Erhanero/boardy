@@ -8,6 +8,7 @@
 	background-color: var(--c-blue);
 	color: var(--c-white);
 	padding: 1rem 1.4rem;
+	box-shadow: 1px 1px 11px -4px rgba(0, 0, 0, 0.6);
 
 	.card__title {
 		font-size: 1.5rem;
@@ -16,5 +17,15 @@
 		&:last-child {
 			margin-bottom: 0;
 		}
+	}
+
+	.card__label {
+		display: inline-block;
+		color: var(--c-white);
+		background-color: rgba(0,0,0, 0.6);
+		border-radius: 3rem;
+		text-align: center;
+		padding: .4rem 1rem;
+		font-size: 1.1rem;
 	}
 }
