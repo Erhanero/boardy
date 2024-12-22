@@ -3,5 +3,21 @@
 // ==========================================================================
 
 .input-field {
-	
+	width: 100%;
+	border: 1px solid var(--c-base);
+	box-shadow: 4px 4px 4px -4px rgba(0, 0, 0, 0.5);
+	border-radius: .6rem;	
+	height: 3.6rem;
+	padding: .6rem 1rem;
+	font-size: 1.6rem;
+	transition: border-color var(--t-duration);
+
+	&:focus {
+		border-color: var(--c-blue);
+	}
+}
+
+.input-field--textarea {
+	height: 11rem;
+	resize: none;
 }
