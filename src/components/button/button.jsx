@@ -6,6 +6,7 @@ import classNames from 'classnames';
 const Button = (props) => {
     const {
         as: Component = 'button',
+        variant,
         href,
         onClick,
         className,
@@ -16,7 +17,7 @@ const Button = (props) => {
         <Component
             onClick={onClick}
             href={href}
-            className={classNames("btn", className)}
+            className={classNames("button", className, variant && `button--${variant}`)}
         >
             {children}
         </Component>
