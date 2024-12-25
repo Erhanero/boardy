@@ -35,16 +35,18 @@ const Cards = () => {
         setShowModal(true);
     };
 
-    return (    
+    return (
         <div className="cards">
-            <Stack direction="column" rowGap="12">
-                <Card />
-                <Card />
-                <Card />
-                <Card />
+            <div className="cards__inner">
+                <Stack direction="column" alignItems="normal" rowGap="12">
+                    <Card />
+                    <Card />
+                    <Card />
+                    <Card />
+                </Stack>
+            </div>
 
-                <Button onClick={handleOpenModal}>+ Add new card</Button>
-            </Stack>
+            <Button className="cards__button" onClick={handleOpenModal}>+ Add new card</Button>
 
             <Modal isOpen={showModal} title="Create new card" onClose={handleCloseModal}>
                 <FormAddCard />

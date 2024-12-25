@@ -3,5 +3,19 @@
 // ==========================================================================
 
 .cards {
-	
+	flex: 1;
+	overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+
+	.cards__inner {				
+		margin-bottom: 1.2rem;
+		overflow-y: auto;
+		max-height: 100%;
+		flex: 1;
+	}
+
+	.cards__button {
+		width: 100%;
+	}
 }

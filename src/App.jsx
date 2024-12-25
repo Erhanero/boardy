@@ -1,15 +1,18 @@
 /**
- * Internal dependencies.
- */
-import BoardLists from '@/components/board-lists/board-lists';
+* Internal dependencies.
+*/
+import Board from '@/components/board/board';
+import Sidebar from '@/components/sidebar/sidebar';
+import Stack from '@/components/stack/stack';
 
 function App() {
+
     return (
-        <>
-            <BoardLists />
-            
-         
-        </>
+        <Stack >
+            <Sidebar />
+
+            <Board />
+        </Stack>
     );
 }
 
