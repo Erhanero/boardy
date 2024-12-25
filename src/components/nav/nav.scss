@@ -1,0 +1,59 @@
+// ==========================================================================
+// Nav
+// ==========================================================================
+
+.nav {
+	font-size: 1.3rem;
+	text-align: center;
+	position: relative;
+	z-index: 1;
+
+	li + li {
+		margin-top: 2rem;
+	}
+
+	.nav__icon {
+		transition: background-color var(--t-duration);
+	}
+
+	a {
+		display: inline-block;
+		text-decoration: none;	
+		text-align: center;	
+		position: relative;
+		padding: .8rem;		
+		border-radius: .4rem; 
+		transition: background-color, color;
+		transition-duration: var(--t-duration);
+	}
+
+	a:hover {
+		box-shadow: 4px 4px 4px -4px rgba(0, 0, 0, 0.5);
+		background-color: var(--c-white);
+	}
+
+	a:hover .nav__text {
+		opacity: 1;
+	}
+
+	svg {
+		display: block;
+	}	
+
+	.nav__text {
+		display: block;
+		width: max-content;
+		padding: .4rem 1rem;
+		border-radius: .4rem;
+		background-color: var(--c-white);
+		color: var(--c-black);
+		position: absolute;
+		top: 50%;
+		left: calc(100% + 1rem);
+		transform: translateY(-50%);
+		box-shadow: 4px 4px 4px -4px rgba(0, 0, 0, 0.5);
+		transition: opacity var(--t-duration);
+		opacity: 0;
+		pointer-events: none;
+	}
+}
