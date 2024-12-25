@@ -4,7 +4,7 @@
 import { useState, useRef, useEffect } from 'react';
 import classNames from 'classnames';
 
-const EditableText = ({initialText, className}) => {
+const EditableText = ({initialText, fontSize = '16px', className}) => {
 	const [text, setText] = useState(initialText);
 	const textareaRef = useRef(null);	
 	const [textHeight, setTextHeight] = useState('auto');
@@ -30,7 +30,10 @@ const EditableText = ({initialText, className}) => {
 	}
 
 	return (
-		<div className={classNames("editable-text", className)} style={{ height: textHeight }}>			
+		<div
+			className={classNames("editable-text", className)}
+			style={{ height: textHeight, "--font-size": `${fontSize}` }}
+		>			
 			<h3>{ text }</h3>
 		
 			<textarea

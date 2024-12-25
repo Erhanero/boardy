@@ -8,7 +8,9 @@ import classNames from 'classnames';
  */
 import Button from '@/components/button/button';
 
-const Form = ({onSubmit, children, submitBtnText, className}) => {
+const Form = (props) => {
+	const { onSubmit, children, submitBtnText, className } = props
+
 	return (
 		<div className={classNames('form', className)}>
 			<form action="?" method="post" onSubmit={onSubmit}>
