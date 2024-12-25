@@ -1,0 +1,28 @@
+// ==========================================================================
+// Board 
+// ==========================================================================
+
+.board {
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	height: 100vh;
+	scrollbar-color: var(--c-white) #00000026;
+    scrollbar-width: auto;
+    overflow-x: auto;
+
+	.board__head {
+		display: flex;
+		align-items: flex-start;
+		padding: 2rem 4rem;		
+		border-bottom: 1px solid var(--c-base);
+		margin-bottom: 2rem;
+	}
+
+	.board__inner {
+		padding-inline: 4rem;
+		overflow-y: hidden;
+		overflow-x: auto;
+		flex: 1;
+	}
+}
