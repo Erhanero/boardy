@@ -1,18 +1,11 @@
 /**
 * Internal dependencies.
 */
-import Board from '@/components/board/board';
-import Sidebar from '@/components/sidebar/sidebar';
-import Stack from '@/components/stack/stack';
-
+import Router from '@/router';
 function App() {
 
     return (
-        <Stack >
-            <Sidebar />
-
-            <Board />
-        </Stack>
+      <Router />
     );
 }
 
