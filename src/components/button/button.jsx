@@ -11,6 +11,7 @@ const Button = (props) => {
         onClick,
         className,
         children,
+        ...rest
     } = props;
 
     return (
@@ -18,6 +19,7 @@ const Button = (props) => {
             onClick={onClick}
             href={href}
             className={classNames("button", className, variant && `button--${variant}`)}
+            {...rest}
         >
             {children}
         </Component>
