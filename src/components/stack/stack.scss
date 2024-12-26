@@ -4,9 +4,16 @@
 
 .stack {	
 	display: flex;
+	flex-wrap: var(--wrap);
 	flex-direction: var(--direction);
 	align-items: var(--align-items);
 	justify-content: var(--justify-content);
 	row-gap: var(--row-gap);
 	column-gap: var(--column-gap);
+
+	.stack__item {
+		--cols: 1;
+		flex: 0 0 calc(100% / var(--cols) - var(--column-gap) / var(--cols) * (var(--cols) - 1));		
+		max-width: calc(100% / var(--cols) - var(--column-gap) / var(--cols) * (var(--cols) - 1));
+	}
 }

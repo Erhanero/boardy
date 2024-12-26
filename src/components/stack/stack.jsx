@@ -3,9 +3,15 @@
  */
 import classNames from 'classnames';
 
+/**
+ * Internal dependencies.
+ */
+import StackItem from '@/components/stack/stack-item';
+
 const Stack = (props) => {
     const {
         direction = 'row',
+        wrap,
         alignItems,
         justifyContent,
         columnGap = 0,
@@ -19,6 +25,7 @@ const Stack = (props) => {
         <div
             className={classNames("stack", className)}            
             style={{
+                "--wrap": wrap,
                 "--direction": direction,
                 "--align-items": alignItems,
                 "--justify-content": justifyContent,
@@ -31,5 +38,7 @@ const Stack = (props) => {
         </div>
     );
 };
+
+Stack.Item = StackItem;
 
 export default Stack;
