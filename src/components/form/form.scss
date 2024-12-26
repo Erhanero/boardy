@@ -3,22 +3,49 @@
 // ==========================================================================
 
 .form {
-	.form__body {
-		margin-bottom: 3rem;
-	}
+    .form__body {
+        margin-bottom: 2rem;
+    }
 
-	.form__label {
-		margin-bottom: .4rem;
-		display: inline-block;
-		font-size: 1.4rem;
-	}
+    .form__label {
+        margin-bottom: 0.4rem;
+        display: inline-block;
+        font-size: 1.4rem;
+    }
 
-	.form__controls + .form__controls {
-		margin-top: 2rem;
-	}
+    .form__group + .form__group {
+        margin-top: 2rem;
+    }
 
-	.form__actions {
-		display: flex;
-		justify-content: flex-end;
-	}
+    .form__error {
+        font-size: 1.2rem;
+        display: block;
+        background-color: #ffebeb;
+        color: #fa4a4a;
+        margin-top: .6rem;
+        padding: 0.4rem;
+		border-radius: .2rem;
+    }
+
+    .form__actions {
+        display: flex;
+        justify-content: flex-end;
+    }
+}
+
+/* ------------------------------------------------------------ *\
+	Form alt	
+\* ------------------------------------------------------------ */
+
+.form--alt {
+    background-color: var(--c-white);
+    border-radius: 0.8rem;
+    padding: 2rem;
+    width: 100%;
+    max-width: 40rem;
+    margin: 0 auto;
+
+    .form__actions {
+        justify-content: center;
+    }
 }
