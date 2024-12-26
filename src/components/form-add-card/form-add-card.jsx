@@ -46,15 +46,15 @@ const FormAddCard = () => {
 	return (
 		<Form onSubmit={handleSubmit(onSubmit)} submitBtnText="Add">
 			{fields.map(({ id, name, label, validation, type }) => (
-				<div className="form__controls" key={id}>
+				<div className="form__group" key={id}>
 					<label htmlFor={id} className="form__label">
 						{label}
 					</label>
 
 					<InputField {...register(name, validation)} type={type} name={name} id={id} />
 
-					{errors[name]?.type === 'required' && (
-						<span role="form__error">{errors[name]?.message}</span>
+					{errors[name] && (
+						<span className="form__error">{errors[name]?.message}</span>
 					)}
 				</div>
 			))}

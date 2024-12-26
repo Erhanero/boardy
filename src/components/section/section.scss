@@ -1,0 +1,42 @@
+// ==========================================================================
+// Section
+// ==========================================================================
+
+.section {	
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+
+	.section__head {
+		padding: 2rem 4rem;		
+		border-bottom: 1px solid var(--c-base);
+		line-height: 1;
+	}
+
+	.section__head h3 {
+		padding: .6rem;
+	}
+
+	.section__body {
+		padding-top: 2rem;
+		padding-inline: 4rem;
+		flex: 1;
+	}
+	.section__col {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 5rem;
+		height: 100%;
+	}
+}
+
+/* ------------------------------------------------------------ *\
+	Section alt
+\* ------------------------------------------------------------ */
+
+.section--alt {
+	.section__body {
+		padding: 0;
+	}
+}
