@@ -16,7 +16,7 @@
 		transition: background-color var(--t-duration);
 	}
 
-	a {
+	.nav__link {
 		display: inline-block;
 		text-decoration: none;	
 		text-align: center;	
@@ -27,12 +27,13 @@
 		transition-duration: var(--t-duration);
 	}
 
-	a:hover {
+	.nav__link:hover,
+	.nav__link.active {
 		box-shadow: 4px 4px 4px -4px rgba(0, 0, 0, 0.5);
 		background-color: var(--c-white);
 	}
 
-	a:hover .nav__text {
+	.nav__link:hover .nav__text {
 		opacity: 1;
 	}
 
