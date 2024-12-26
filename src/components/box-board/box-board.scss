@@ -1,0 +1,16 @@
+// ==========================================================================
+// Box board
+// ==========================================================================
+
+.box-board {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 100%;
+	border-radius: 1rem;
+	background-color: var(--c-blue);	
+	padding: 1.2rem;
+	min-height: 8rem;
+	color: var(--c-white);
+}
