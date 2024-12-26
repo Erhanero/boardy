@@ -6,7 +6,7 @@ import Boards from '@/pages/boards';
 import MainLayout from '@/layouts/main-layout';
 import Login from '@/pages/login';
 import Register from '@/pages/register';
-import PageNotFound from '@/pages/page-not-found';
+import NotFound from '@/pages/not-found';
 import BoardPage from '@/pages/board-page';
 
 const Router = () => {
@@ -20,7 +20,7 @@ const Router = () => {
 					<Route path="/board" element={<BoardPage />} />
 					{/* <Route path="/boards/:id" element={<BoardPage />} /> */}
 					{/* <Route path="/create-board" element={<CreateBoard />} /> */}
-					<Route path="*" element={<PageNotFound />} />
+					<Route path="*" element={<NotFound />} />
 				</Route>
 
 			</Routes>
