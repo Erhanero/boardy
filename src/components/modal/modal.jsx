@@ -3,7 +3,6 @@
  */
 import { useEffect, useRef } from 'react';
 import { CSSTransition } from 'react-transition-group';
-import classNames from 'classnames';
 
 const Modal = ({ isOpen, title, children, onClose }) => {
 	const nodeRef = useRef(null);
