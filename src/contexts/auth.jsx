@@ -1,7 +1,7 @@
 /**
  * External dependencies.
  */
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { useLoading } from '@/contexts/loading';
 
@@ -10,45 +10,53 @@ const AuthContext = createContext();
 const AuthProvider = ({ children }) => {
 	const [user, setUser] = useState(null);
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
+	const [isAuthLoading, setIsAuthLoading] = useState(true);
 	const { showLoading, hideLoading } = useLoading();
 
 	/**
-	 * Handle auth state change.
+	 * Hande auth state change.
 	 * 
 	 * @param {Object} firebaseUser
 	 * @returns {Void}
 	 */
 	const handleAuthStateChange = (firebaseUser) => {
-		showLoading();
-
 		if (firebaseUser) {
-		  setUser({
-			email: firebaseUser.email,
-			uid: firebaseUser.uid,
-		  });
+			setUser({
+				email: firebaseUser.email,
+				uid: firebaseUser.uid,
+			});
 			setIsAuthenticated(true);
-			
 		} else {
-		  setUser(null);
-		  setIsAuthenticated(false);
+			setUser(null);
+			setIsAuthenticated(false);
 		}
-
+		setIsAuthLoading(false);
 		hideLoading();
-	  };
-	
+	};
+
 	useEffect(() => {
-		  const auth = getAuth();		  
-		  const unsubscribe = onAuthStateChanged(auth, handleAuthStateChange);		  
-		  
-		return unsubscribe;
-	  }, []);
-	  
+		const auth = getAuth();
+		showLoading();
+		const unsubscribe = onAuthStateChanged(auth, handleAuthStateChange);
+
+		return () => {
+			unsubscribe();
+			hideLoading();
+		};
+	}, []);
 
 	return (
-		<AuthContext.Provider value={{ user, isAuthenticated }}>
+		<AuthContext.Provider value={{ user, isAuthenticated, isAuthLoading }}>
 			{children}
 		</AuthContext.Provider>
 	);
 };
 
-export {AuthProvider, AuthContext};
+/**
+ * Custom hook to use the AuthContext.
+ * 
+ * @returns {Object} Auth context value.
+ */
+const useAuth = () => useContext(AuthContext);
+
+export { AuthProvider, useAuth };

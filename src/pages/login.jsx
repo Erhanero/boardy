@@ -5,7 +5,6 @@ import FormLogin from '@/components/form-login/form-login';
 import Section from '@/components/section/section';
 import Stack from '@/components/stack/stack';
 
-
 const Login = () => {
 	return (
 		<Section title="Login" className="section--alt">

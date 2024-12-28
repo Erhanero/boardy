@@ -2,10 +2,17 @@
 * Internal dependencies.
 */
 import Router from '@/router';
+import { AuthProvider } from '@/contexts/auth';
+import { LoadingProvider } from '@/contexts/loading';
+
 function App() {
 
     return (
-      <Router />
+        <LoadingProvider>
+            <AuthProvider>
+                <Router />
+            </AuthProvider>
+        </LoadingProvider>
     );
 }
 

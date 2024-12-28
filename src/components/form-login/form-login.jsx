@@ -2,33 +2,40 @@
  * External dependencies.
  */
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 /**
  * Internal dependencies.
  */
 import InputField from '@/components/input-field/input-field';
 import Form from '@/components/form/form';
+import { useLogin } from '@/data/login';
 
 const FormLogin = () => {
+	const navigate = useNavigate();
+	const { signIn, authError, isLoading } = useLogin();
 	const {
 		handleSubmit,
 		register,
 		formState: { errors },
 	} = useForm()
 
-	const onSubmit = (data) => {
-		console.log(data);
-		console.log(errors);
+	const onSubmit = async (data) => {
+		const { email, password } = data;
+		const isSignInSuccessful = await signIn({ email, password });
+
+		if (isSignInSuccessful) {
+			navigate('/');
+		}
 	}
 
 	const fields = [
 		{
-			id: 'username',
-			name: 'username',
-			label: 'Username',
-			validation: { required: 'Username is required' },
-			type: 'text',
+			id: 'email',
+			name: 'email',
+			label: 'Email',
+			validation: { required: 'Email is required' },
+			type: 'email',
 		},
 		{
 			id: 'password',
@@ -40,7 +47,14 @@ const FormLogin = () => {
 	];
 
 	return (
-		<Form className="form--alt" onSubmit={handleSubmit(onSubmit)} submitBtnText="Login">
+		<Form
+			className="form--alt"
+			onSubmit={handleSubmit(onSubmit)}
+			submitBtnText="Login"
+			disabled={isLoading}
+		>
+			{authError && <span className="form__error">{authError}</span>}
+
 			{fields.map(({ id, name, label, validation, type }) => (
 				<div className="form__group" key={id}>
 					<label htmlFor={id} className="form__label">
