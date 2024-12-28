@@ -2,15 +2,18 @@
  * External dependencies.
  */
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 /**
  * Internal dependencies.
  */
 import InputField from '@/components/input-field/input-field';
 import Form from '@/components/form/form';
+import { useRegister } from '@/data/register';
 
-const FormLogin = () => {
+const FormRegister = () => {
+	const navigate = useNavigate();
+	const { signUp, isLoading, authError } = useRegister();
 	const {
 		register,
 		handleSubmit,
@@ -18,8 +21,19 @@ const FormLogin = () => {
 		watch
 	} = useForm();
 
-	const onSubmit = (data) => {
-		console.log('Registration Data:', data);
+	/**
+	 * On submit.
+	 * 
+	 * @param {Object} data 
+	 * @returns {Void}
+	 */
+	const onSubmit = async (data) => {
+		const { email, password } = data;
+		const isSignUpSuccessful = await signUp({ email, password });
+
+		if (isSignUpSuccessful) {
+			navigate('/');
+		}
 	};
 
 	const password = watch('password');
@@ -57,7 +71,14 @@ const FormLogin = () => {
 	];
 
 	return (
-		<Form className="form--alt" onSubmit={handleSubmit(onSubmit)} submitBtnText="Sign Up">
+		<Form
+			className="form--alt"
+			onSubmit={handleSubmit(onSubmit)}
+			submitBtnText="Sign Up"
+			disabled={isLoading}
+		>
+			{authError && <span className="form__error">{authError}</span>}
+
 			{fields.map(({ id, name, label, validation, type }) => (
 				<div className="form__group" key={id}>
 					<label htmlFor={id} className="form__label">
@@ -72,11 +93,11 @@ const FormLogin = () => {
 				</div>
 			))}
 
-			<div className="form__group">			 
+			<div className="form__group">
 				<p className="text-xs text-center">Already have an account? <Link to="/login" className="text-blue">Log in here</Link></p>
 			</div>
 		</Form >
 	)
 }
 
-export default FormLogin;
+export default FormRegister;
