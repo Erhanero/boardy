@@ -12,24 +12,22 @@ import Login from '@/pages/login';
 import Register from '@/pages/register';
 import NotFound from '@/pages/not-found';
 import BoardPage from '@/pages/board-page';
-import PrivateRoute from '@/components/private-route/private-route';
+import ProtectedRoute from '@/components/protected-route/protected-route';
 import { useAuth } from '@/contexts/auth';
-import { useLoading } from '@/contexts/loading';
 
 
 const Router = () => {
-	const { isLoading } = useLoading();
-	const { isAuthenticated, isAuthLoading } = useAuth();
+	const { user, isLoading } = useAuth();
 
-    if (isAuthLoading || isLoading) {
-        return null; 
-    }
+	if (isLoading) {
+		return null;
+	}
 
 	return (
 		<BrowserRouter>
 			<Routes>
 				<Route path="/" element={<MainLayout />} >						
-					<Route element={<PrivateRoute />} >
+					<Route element={<ProtectedRoute />} >
 						<Route index element={<Boards />} />					
 						<Route path="/board" element={<BoardPage />} />
 					{/* <Route path="/boards/:id" element={<BoardPage />} /> */}
@@ -37,17 +35,13 @@ const Router = () => {
 					</Route>
 
 					<Route
-                        path="/login"
-                        element={
-                            isAuthenticated ? <Navigate to="/" replace /> : <Login />
-                        }
-                    />
-                    <Route
-                        path="/register"
-                        element={
-                            isAuthenticated ? <Navigate to="/" replace /> : <Register />
-                        }
-                    />
+						path="/login"
+						element={user ? <Navigate to="/" /> : <Login />}
+					/>
+					<Route
+						path="/register"
+						element={user ? <Navigate to="/" /> : <Register />}
+					/>
 					<Route path="*" element={<NotFound />} />
 				</Route>
 

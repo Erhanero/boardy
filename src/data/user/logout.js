@@ -13,7 +13,7 @@ export const useLogout = () => {
      * @returns {Promise<void>}
      */
 	 const logout = async () => {
-        const auth = getAuth();
+         const auth = getAuth();
 
         try {
             await signOut(auth);
