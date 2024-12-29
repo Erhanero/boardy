@@ -9,7 +9,7 @@ import { Link, useNavigate } from 'react-router-dom';
  */
 import InputField from '@/components/input-field/input-field';
 import Form from '@/components/form/form';
-import { useLogin } from '@/data/login';
+import { useLogin } from '@/data/user/login';
 
 const FormLogin = () => {
 	const navigate = useNavigate();
@@ -51,6 +51,7 @@ const FormLogin = () => {
 			className="form--alt"
 			onSubmit={handleSubmit(onSubmit)}
 			submitBtnText="Login"
+			isLoading={isLoading}
 			disabled={isLoading}
 		>
 			{authError && <span className="form__error">{authError}</span>}
