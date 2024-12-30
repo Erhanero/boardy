@@ -26,25 +26,24 @@ const Router = () => {
 	return (
 		<BrowserRouter>
 			<Routes>
-				<Route path="/" element={<MainLayout />} >						
+				<Route path='/' element={<MainLayout />} >							
 					<Route element={<ProtectedRoute />} >
+						<Route path='boards' element={<Boards />} />					
 						<Route index element={<Boards />} />					
-						<Route path="/board" element={<BoardPage />} />
-					{/* <Route path="/boards/:id" element={<BoardPage />} /> */}
-					{/* <Route path="/create-board" element={<CreateBoard />} /> */}
+						<Route path='/boards/:boardId' element={<BoardPage />} />
+						{/* <Route path='/create-board' element={<CreateBoard />} /> */}
 					</Route>
 
 					<Route
-						path="/login"
-						element={user ? <Navigate to="/" /> : <Login />}
+						path='/login'
+						element={user ? <Navigate to='/' /> : <Login />}
 					/>
 					<Route
-						path="/register"
-						element={user ? <Navigate to="/" /> : <Register />}
+						path='/register'
+						element={user ? <Navigate to='/' /> : <Register />}
 					/>
-					<Route path="*" element={<NotFound />} />
+					<Route path='*' element={<NotFound />} />
 				</Route>
-
 			</Routes>
 		</BrowserRouter >
 	)

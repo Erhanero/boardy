@@ -25,6 +25,7 @@ const Nav = () => {
 					<span className="nav__text">Create board</span>
 				</NavLink>
 			</li>
+
 			<li>
 				<button onClick={logout} className="nav__link">
 					<span className="nav__icon">
@@ -74,7 +75,7 @@ const Nav = () => {
 		<nav className="nav">
 			<ul>
 				<li>
-					<NavLink to="/" className="nav__link">
+					<NavLink to="/boards" className="nav__link">
 						<div className="nav__icon">
 							<svg width="24" viewBox="0 0 24 24">
 								<path fill="none" d="M0 0h24v24H0z" />

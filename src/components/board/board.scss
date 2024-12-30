@@ -23,5 +23,13 @@
 		overflow-y: hidden;
 		overflow-x: auto;
 		flex: 1;
+		position: relative;
+	}
+
+	.board__spinner {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
 	}
 }

@@ -13,6 +13,7 @@ const useGetBoards = () => {
 
 	useEffect(() => {
 		if (!user) {
+			setIsLoading(false);
 			return;
 		}
 

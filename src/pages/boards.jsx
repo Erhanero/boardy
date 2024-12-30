@@ -8,27 +8,27 @@ import Section from '@/components/section/section';
 /**
  * Internal dependencies.
  */
-import useGetBoards from '@/data/boards/get-boards';
+import useBoards from '@/data/boards/use-boards';
 import LoadingSpinner from '@/components/loading-spinner/loading-spinner';
 
 const Boards = () => {
-	const { boards, isLoading } = useGetBoards();
+	const { boards, isLoading } = useBoards();
 
 	const renderContent = () => {
 		if (isLoading) {
-		  return <LoadingSpinner width="60" />;
+			return <LoadingSpinner className="section__spinner" width="60" />;
 		}
-	
+
 		if (!boards?.length) {
-		  return <p>No boards available</p>;
+			return <p>No boards available</p>;
 		}
-	
+
 		return boards.map((board) => (
-		  <Stack.Item cols="5" key={board.id}>
-			<BoxBoard title={board.title} />
-		  </Stack.Item>
+			<Stack.Item cols="5" key={board.id}>
+				<BoxBoard id={board.id} title={board.title} />
+			</Stack.Item>
 		));
-	  };
+	};
 
 	return (
 		<Section title="Boards">
