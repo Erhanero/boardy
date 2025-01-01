@@ -17,6 +17,10 @@
 		border-color: var(--c-blue);
 		background-color: #ececec96;
 	}
+
+	&::placeholder {
+		opacity: .5;
+	}
 }
 
 .input-field--textarea {

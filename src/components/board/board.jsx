@@ -1,7 +1,7 @@
 /**
  * External dependencies.
  */
-import { useEffect } from 'react';
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 /**
@@ -13,19 +13,19 @@ import EditableText from '@/components/editable-text/editable-text';
 import useLists from '@/data/boards/use-lists';
 import LoadingSpinner from '@/components/loading-spinner/loading-spinner';
 import useBoard from '@/data/boards/use-board';
+import Button from '@/components/button/button';
+import FormAddList from '@/components/form-add-list/form-add-list';
+import Popover from '@/components/popover/popover';
 
 const Board = () => {
     const { boardId } = useParams();
     const { board, isLoading: isBoardLoading } = useBoard(boardId);
     const { lists, isLoading: isListsLoading } = useLists(boardId);
+    const { showForm, setShowForm } = useState(false);
 
     const renderContent = () => {
         if (isListsLoading) {
             return <LoadingSpinner className="board__spinner" width="60" />;
-        }
-
-        if (!lists?.length) {
-            return <p>No lists available</p>;
         }
 
         return lists.map((list) => (
@@ -34,7 +34,7 @@ const Board = () => {
     };
 
     if (!board) {
-        return <p style={{padding: '50px', textAlign: 'center'}}>Board not found</p>;
+        return <p style={{ padding: '50px', textAlign: 'center' }}>Board not found</p>;
     }
 
     return (
@@ -45,6 +45,14 @@ const Board = () => {
 
             <Stack className="board__inner" alignItems="flex-start" columnGap="20" >
                 {renderContent()}
+
+                {!isListsLoading && (
+                    <Popover                        
+                        trigger={<Button variant="blue">+ Add a list</Button>}                        
+                    >
+                        <FormAddList />
+                    </Popover>
+                )}
             </Stack>
         </div>
     );

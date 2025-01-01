@@ -30,32 +30,4 @@
 @import '@/components/main-content/main-content.scss';
 @import '@/components/box-board/box-board.scss';
 @import '@/components/section/section.scss';
-
-.loader {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	z-index: 100;
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100vw;
-	height: 100vh;
-	background-color: var(--c-blue);
-
-	svg {
-		animation: loading 1s infinite cubic-bezier(0.24, 0.28, 0.64, 0.98);
-	}
-
-	@keyframes loading {
-		0% {
-			transform: scale(1);
-		}
-		50% {
-			transform:  scale(0.7);
-		}
-		100% {
-			transform:  scale(1);
-		}
-	}
-}
+@import '@/components/popover/popover.scss';

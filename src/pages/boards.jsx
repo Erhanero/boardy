@@ -10,6 +10,9 @@ import Section from '@/components/section/section';
  */
 import useBoards from '@/data/boards/use-boards';
 import LoadingSpinner from '@/components/loading-spinner/loading-spinner';
+import Popover from '@/components/popover/popover';
+import Button from '@/components/button/button';
+import FormAddBoard from '@/components/form-add-board/form-add-board';
 
 const Boards = () => {
 	const { boards, isLoading } = useBoards();
@@ -34,6 +37,14 @@ const Boards = () => {
 		<Section title="Boards">
 			<Stack wrap="wrap" columnGap="50" alignItems="flex-start" rowGap="50">
 				{renderContent()}
+
+				{!isLoading && (
+					<Popover
+						trigger={<Button variant="blue">+ Create new board</Button>}
+					>
+						<FormAddBoard />
+					</Popover>
+				)}
 			</Stack>
 		</Section>
 	);
