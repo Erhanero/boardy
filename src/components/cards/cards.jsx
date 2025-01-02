@@ -46,7 +46,7 @@ const Cards = () => {
                 </Stack>
             </div>
 
-            <Button className="cards__button" onClick={handleOpenModal}>+ Add new card</Button>
+            <Button className="cards__button" onClick={handleOpenModal}>+ Add a card</Button>
 
             <Modal isOpen={showModal} title="Create new card" onClose={handleCloseModal}>
                 <FormAddCard />

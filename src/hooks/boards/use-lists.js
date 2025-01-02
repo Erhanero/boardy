@@ -3,7 +3,7 @@
  */
 import { useEffect, useState } from 'react';
 import { collection, onSnapshot, doc, query, where } from 'firebase/firestore';
-import { db } from '@/firebase';
+import { db } from '@/services/firebase';
 
 const useLists = (boardId ) => {
     const [lists, setLists] = useState([]);
@@ -15,7 +15,6 @@ const useLists = (boardId ) => {
         setIsLoading(true);
 
 		const boardRef = doc(db, 'boards', boardId);
-		console.log(boardRef)
 		const listsQuery = query(
 			collection(db, 'lists'),
 			where('boardId', '==', boardRef),

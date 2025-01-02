@@ -8,7 +8,7 @@ import Section from '@/components/section/section';
 /**
  * Internal dependencies.
  */
-import useBoards from '@/data/boards/use-boards';
+import useBoards from '@/hooks/boards/use-boards';
 import LoadingSpinner from '@/components/loading-spinner/loading-spinner';
 import Popover from '@/components/popover/popover';
 import Button from '@/components/button/button';
@@ -22,10 +22,6 @@ const Boards = () => {
 			return <LoadingSpinner className="section__spinner" width="60" />;
 		}
 
-		if (!boards?.length) {
-			return <p>No boards available</p>;
-		}
-
 		return boards.map((board) => (
 			<Stack.Item cols="5" key={board.id}>
 				<BoxBoard id={board.id} title={board.title} />
@@ -35,12 +31,22 @@ const Boards = () => {
 
 	return (
 		<Section title="Boards">
-			<Stack wrap="wrap" columnGap="50" alignItems="flex-start" rowGap="50">
+			<Stack wrap="wrap" columnGap="50" alignItems="stretch" rowGap="50">
 				{renderContent()}
 
 				{!isLoading && (
 					<Popover
-						trigger={<Button variant="blue">+ Create new board</Button>}
+						trigger={
+							<Button
+								variant="lightblue"
+								style={{
+									height: '100%',
+									borderRadius: '1rem',
+									fontSize: "1.8rem"
+								}}>
+								+ Create new board
+							</Button>
+						}
 					>
 						<FormAddBoard />
 					</Popover>

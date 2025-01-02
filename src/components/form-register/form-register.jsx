@@ -9,7 +9,7 @@ import { Link, useNavigate } from 'react-router-dom';
  */
 import InputField from '@/components/input-field/input-field';
 import Form from '@/components/form/form';
-import { useRegister } from '@/data/user/register';
+import { useRegister } from '@/hooks/auth/use-register';
 
 const FormRegister = () => {
 	const navigate = useNavigate();

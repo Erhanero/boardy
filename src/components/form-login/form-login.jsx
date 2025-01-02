@@ -9,7 +9,7 @@ import { Link, useNavigate } from 'react-router-dom';
  */
 import InputField from '@/components/input-field/input-field';
 import Form from '@/components/form/form';
-import { useLogin } from '@/data/user/login';
+import { useLogin } from '@/hooks/auth/use-login';
 
 const FormLogin = () => {
 	const navigate = useNavigate();

@@ -6,7 +6,7 @@ import { NavLink, useLocation } from 'react-router-dom';
 /**
  * Internal dependencies.
  */
-import { useLogout } from '@/data/user/logout';
+import { useLogout } from '@/hooks/auth/use-logout';
 import { useAuth } from '@/contexts/auth';
 import Popover from '@/components/popover/popover';
 import FormAddBoard from '@/components/form-add-board/form-add-board';
