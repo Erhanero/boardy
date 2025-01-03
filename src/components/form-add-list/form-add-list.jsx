@@ -2,16 +2,17 @@
  * External dependencies.
  */
 import { useForm } from 'react-hook-form';
-import { Link, useNavigate } from 'react-router-dom';
 
 /**
  * Internal dependencies.
  */
 import InputField from '@/components/input-field/input-field';
 import Form from '@/components/form/form';
+import useCreateList from '@/hooks/lists/use-create-list';
 
-const FormAddList = () => {
-	const navigate = useNavigate();
+const FormAddList = ({boardId, onSuccess}) => {
+	const {createList, isLoading} = useCreateList();
+	
 	const {
 		handleSubmit,
 		register,
@@ -19,15 +20,14 @@ const FormAddList = () => {
 	} = useForm()
 
 	const onSubmit = async (data) => {
-		const { email, password } = data;
-		// const isSignInSuccessful = await signIn({ email, password });
-
+		await createList(data, boardId);
+		onSuccess?.();
 	}
 
 	const fields = [
 		{
-			id: 'name',
-			name: 'name',
+			id: 'listTitle',
+			name: 'listTitle',
 			validation: { required: 'Name is required' },
 			type: 'text',
 		}
@@ -38,8 +38,8 @@ const FormAddList = () => {
 			className="form--alt"
 			onSubmit={handleSubmit(onSubmit)}
 			submitBtnText="Add"
-			// isLoading={isLoading}
-			// disabled={isLoading}
+			isLoading={isLoading}
+			disabled={isLoading}
 		>
 
 			{fields.map(({ id, name, label, validation, type }) => (

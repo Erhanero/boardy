@@ -4,11 +4,12 @@ const StackItem = (props) => {
 	const {
 		cols,
 		children,
-		className
+		className,
+		style
 	} = props;
 
 	return (
-		<div className={classNames('stack__item', className)} style={{'--cols': cols}}>
+		<div className={classNames('stack__item', className)} style={{'--cols': cols, ...style}}>
 			{children}
 		</div>
 	)

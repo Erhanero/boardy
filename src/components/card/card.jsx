@@ -1,11 +1,11 @@
-const Card = () => {
+const Card = ({id, title, description, label, onClick}) => {
 	return (
-		<div className="card">
-			<h3 className="card__title">Example title</h3>
+		<div className="card" onClick={() => onClick({id, title, description, label})}>
+			<h3 className="card__title">{title}</h3>
 
-			<p className="card__description">Lorem ipsum dolor sit </p>
+			<p className="card__description">{description} </p>
 
-			<span className="card__label">Medium</span>
+			{label && <span className="card__label">{label}</span>}
 		</div>	
 	)
 }

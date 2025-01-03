@@ -1,7 +1,8 @@
 /**
  * External dependencies.
  */
-import { useParams } from 'react-router-dom';
+import { useState } from 'react';
+import { useParams} from 'react-router-dom';
 
 /**
  * Internal dependencies.
@@ -9,7 +10,7 @@ import { useParams } from 'react-router-dom';
 import BoardList from '@/components/board-list/board-list';
 import Stack from '@/components/stack/stack';
 import EditableText from '@/components/editable-text/editable-text';
-import useLists from '@/hooks/boards/use-lists';
+import useLists from '@/hooks/lists/use-lists';
 import LoadingSpinner from '@/components/loading-spinner/loading-spinner';
 import useBoard from '@/hooks/boards/use-board';
 import Button from '@/components/button/button';
@@ -27,11 +28,11 @@ const Board = () => {
         }
 
         return lists.map((list) => (
-            <BoardList key={list.id} id={list.id} title={list.title} />
+            <BoardList boardId={boardId} key={list.id} listId={list.id} title={list.title} />
         ));
     };
 
-    if (!board) {
+    if (!board && !isBoardLoading) {
         return <p style={{ padding: '50px', textAlign: 'center' }}>Board not found</p>;
     }
 
@@ -45,10 +46,17 @@ const Board = () => {
                 {renderContent()}
 
                 {!isListsLoading && (
-                    <Popover                        
+                    <Popover                 
                         trigger={<Button variant="blue">+ Add a list</Button>}                        
                     >
-                        <FormAddList />
+                        {(closePopover) => (
+                            <FormAddList 
+                                boardId={boardId} 
+                                onSuccess={() => {
+                                    closePopover();
+                                }} 
+                            />
+                        )}
                     </Popover>
                 )}
             </Stack>

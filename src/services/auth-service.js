@@ -8,7 +8,7 @@ import {
     browserSessionPersistence,
 	signInWithEmailAndPassword,
 	signOut
-} from "firebase/auth";
+} from 'firebase/auth';
 
 /**
  * Internal dependencies.
@@ -16,6 +16,13 @@ import {
 import { authErrorMessages } from '@/constants/auth-errors';
 
 export const authService = {
+    /**
+     * Login.
+     * 
+     * @param {String} email 
+     * @param {String} password 
+     * @returns {Promise<void>}
+     */
     async login(email, password) {
 		const auth = getAuth();
 		
@@ -28,6 +35,13 @@ export const authService = {
         }
     },
 
+     /**
+     * Register.
+     * 
+     * @param {String} email 
+     * @param {String} password 
+     * @returns {Promise<void>}
+     */
     async register(email, password) {
 		const auth = getAuth();
 		
@@ -41,6 +55,11 @@ export const authService = {
         }
     },
 
+    /**
+     * Logout   
+     * 
+     * @returns {Promise<void>}
+     */
     async logout() {
 		const auth = getAuth();
 		

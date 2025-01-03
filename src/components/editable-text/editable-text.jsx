@@ -10,10 +10,12 @@ const EditableText = ({ initialText, fontSize = '16px', className }) => {
 	const [textHeight, setTextHeight] = useState('auto');
 
 	useEffect(() => {
+		setText(initialText);
+
 		if (textareaRef.current) {
 			setTextHeight(textareaRef.current.scrollHeight)
 		}
-	}, [text]);
+	}, [initialText]);
 
 	/**
 	 * Handle text change.

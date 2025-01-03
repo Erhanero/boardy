@@ -1,38 +1,54 @@
-import { collection, doc, query, where, onSnapshot } from 'firebase/firestore';
+/**
+ * External dependencies.
+ */
+import {
+    collection,
+    doc,
+    query,
+    where,
+    onSnapshot,
+    addDoc
+} from 'firebase/firestore';
 import { db } from '@/services/firebase';
 
 const boardService = {
-	/**
-	 * Get boards.
-	 * 
-	 * @param {String} userId 
-	 * @param {Function} onSuccess 
-	 * @param {Function} onError
-	 * @returns {Function}
-	 */
-	getBoards(userId, onSuccess, onError) {        
-		try {
-			const userRef = doc(db, 'users', userId);
-			const boardsQuery = query(
-				collection(db, 'boards'),
-				where('owner', '==', userRef)
-			);
+    /**
+     * Get boards by user id.
+     *
+     * @param {String} userId
+     * @param {Function} onSuccess
+     * @param {Function} onError
+     * @returns {Function}
+     */
+    getBoardsByUserId(userId, onSuccess, onError) {
+        try {
+            const userRef = doc(db, 'users', userId);
+            const boardsQuery = query(
+                collection(db, 'boards'),
+                where('owner', '==', userRef)
+            );
 
-			return onSnapshot(boardsQuery, (snapshot) => {
-				const boardsData = snapshot.docs.map(doc => ({
-					id: doc.id,
-					...doc.data()
-				}));
-				onSuccess(boardsData);
-			});
+            return onSnapshot(boardsQuery, (snapshot) => {
+                const boardsData = snapshot.docs.map((doc) => ({
+                    id: doc.id,
+                    ...doc.data(),
+                }));
 
-		} catch (error) {
-			if (onError) {
-				onError(error);
-			}
-		}               
+                onSuccess(boardsData);
+            });
+        } catch (error) {
+            onError?.(error);
+        }
     },
 
+    /**
+     * Get board by id.
+     *
+     * @param {String} boardId
+     * @param {Function} onSuccess
+     * @param {Function} onError
+     * @returns {Function}
+     */
     getBoardById(boardId, onSuccess, onError) {
         try {
             const boardRef = doc(db, 'boards', boardId);
@@ -40,35 +56,39 @@ const boardService = {
                 if (doc.exists()) {
                     onSuccess({
                         id: doc.id,
-                        ...doc.data()
-                    })
+                        ...doc.data(),
+                    });
+
                 } else {
                     onSuccess(null);
                 }
             });
         } catch (error) {
-            if (onError) {
-                onError(error);
-            }
+            onError?.(error);
         }
     },
 
-    getLists(boardId, callback) {
-        const boardRef = doc(db, 'boards', boardId);
-        const listsQuery = query(
-            collection(db, 'lists'),
-            where('boardId', '==', boardRef),
-            orderBy('position')
-        );
+    /**
+     * Create board.
+     *
+     * @param {Object} data
+     * @param {String} userId
+     * @returns {Promise}
+     */
+    async createBoard(data, userId) {
+        try {
+            const userRef = doc(db, 'users', userId);
+            const boardData = {
+                title: data.boardTitle,
+                owner: userRef,
+            };
 
-        return onSnapshot(listsQuery, (snapshot) => {
-            const listsData = snapshot.docs.map((doc) => ({
-                id: doc.id,
-                ...doc.data(),
-            }));
-            callback(listsData);
-        });
-    }
+            return await addDoc(collection(db, 'boards'), boardData);
+        } catch (error) {
+            throw error;
+        }
+    },
+
 };
 
 export default boardService;

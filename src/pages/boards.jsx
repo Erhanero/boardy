@@ -32,25 +32,30 @@ const Boards = () => {
 	return (
 		<Section title="Boards">
 			<Stack wrap="wrap" columnGap="50" alignItems="stretch" rowGap="50">
-				{renderContent()}
-
 				{!isLoading && (
-					<Popover
-						trigger={
-							<Button
-								variant="lightblue"
-								style={{
-									height: '100%',
-									borderRadius: '1rem',
-									fontSize: "1.8rem"
-								}}>
-								+ Create new board
-							</Button>
-						}
-					>
-						<FormAddBoard />
-					</Popover>
+					<Stack.Item cols="5" style={{display: "flex"}}>
+						<Popover
+						triggerStyle={{width: "100%"}}	
+							trigger={
+								<Button
+									variant="lightblue"
+									style={{
+										height: "100%",
+										borderRadius: "1rem",
+										fontSize: "1.8rem",
+										minWidth: "auto",
+										width: "100%"
+									}}>
+									+ Create new board
+								</Button>
+							}
+						>
+							<FormAddBoard />
+						</Popover>
+					</Stack.Item>
 				)}
+
+				{renderContent()}
 			</Stack>
 		</Section>
 	);
