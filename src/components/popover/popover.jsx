@@ -4,7 +4,15 @@
 import { useState, useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
 
-const Popover = ({ trigger, position = 'bottom', children, onClose }) => {
+const Popover = (props) => {
+	const {
+		trigger,
+		position = 'bottom',
+		children,
+		onClose,
+		triggerStyle = {},
+	} = props;
+	
 	const [isOpen, setIsOpen] = useState(false);
 	const popoverRef = useRef(null);
 	const triggerRef = useRef(null);
@@ -13,7 +21,7 @@ const Popover = ({ trigger, position = 'bottom', children, onClose }) => {
 	const closePopover = () => {
 		setIsOpen(false);
 		onClose && onClose();
-	};
+	};	
 
 	/**
 	 * Get popover position.
@@ -92,18 +100,27 @@ const Popover = ({ trigger, position = 'bottom', children, onClose }) => {
 			popoverRef.current.style.top = `${position.top}px`;
 			popoverRef.current.style.left = `${position.left}px`;
 		}
+
+		const input = popoverRef.current.querySelector('input');
+		input?.focus();
+
 	}, [isOpen]);
 
 	return (
 		<>
-			<div className="popover-trigger" ref={triggerRef} onClick={togglePopover}>
+			<div
+				className="popover-trigger"
+				ref={triggerRef}
+				onClick={togglePopover}
+				style={triggerStyle}
+			>
 				{trigger}
 			</div>
 
 			{ReactDOM.createPortal(
 				isOpen && (
 					<div ref={popoverRef} className="popover">
-						{children}
+						{typeof children === 'function' ? children(closePopover) : children}
 					</div>
 				),
 				document.body
