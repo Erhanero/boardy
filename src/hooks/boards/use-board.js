@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import boardService from '@/services/board-service';
 
 const useBoard = (boardId) => {
-    const [board, setBoard] = useState([]);
+    const [board, setBoard] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
 
     /**
@@ -42,7 +42,11 @@ const useBoard = (boardId) => {
 
         const unsubscribe = boardService.getBoardById(boardId, onSuccess, onError);
 
-        return () => unsubscribe();
+        return () => {
+            if (typeof unsubscribe === 'function') {
+                unsubscribe();
+            }
+        };
     }, [boardId]);
 
     return {

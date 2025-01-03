@@ -1,13 +1,13 @@
 /**
  * External dependencies.
  */
-import { useEffect, useState } from "react";
-import { useAuth } from "@/contexts/auth";
+import { useEffect, useState } from 'react';
+import { useAuth } from '@/contexts/auth';
 
 /**
  * Internal dependencies.
  */
-import boardService from "@/services/board-service";
+import boardService from '@/services/board-service';
 
 const useBoards = () => {
     const [boards, setBoards] = useState([]);
@@ -42,9 +42,13 @@ const useBoards = () => {
             return;
         }
 
-        const unsubscribe = boardService.getBoards(user.uid, onSuccess, onError);
+        const unsubscribe = boardService.getBoardsByUserId(user.uid, onSuccess, onError);
 
-        return () => unsubscribe();
+        return () => {
+            if (typeof unsubscribe === 'function') {
+                unsubscribe();
+            }
+        };
     }, [user]);
 
     return {
