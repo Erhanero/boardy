@@ -9,6 +9,12 @@
 	color: var(--c-white);
 	padding: 1rem 1.4rem;
 	box-shadow: 1px 1px 11px -4px rgba(0, 0, 0, 0.6);
+	transition: background-color var(--t-duration);
+	cursor: pointer;
+
+	&:hover {
+		background-color: var(--c-darkblue);
+	}
 
 	.card__title {
 		font-size: 1.5rem;
