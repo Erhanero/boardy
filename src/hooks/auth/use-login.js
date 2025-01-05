@@ -27,7 +27,7 @@ export const useLogin = () => {
             return true;
 
         } catch (error) {
-            console.log(error.message)
+            console.error(error.message)
             setAuthError(error.message);
             return false;
             

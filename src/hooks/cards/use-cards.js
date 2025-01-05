@@ -1,58 +1,31 @@
 /**
  * External dependencies.
  */
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 
 /**
  * Internal dependencies.
  */
 import { useAuth } from '@/contexts/auth';
 import cardService from '@/services/card-service';
+import useRequest from '@/hooks/common/use-request';
 
 const useCards = (listId) => {
     const [cards, setCards] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState(null)
+    const { isLoading, error, handleSubscription } = useRequest();
     const { user } = useAuth();
 
-    /**
-     * On success.
-     *
-     * @param {Object} cardsData
-     * @returns {Void}
-     */
-    const onSuccess = (cardsData) => {
-        setCards(cardsData);
-        setIsLoading(false);
-        setError(null);
-    };
-
-    /**
-     * On error.
-     *
-     * @param {Object} error
-     * @returns {Void}
-     */
-    const onError = (error) => {
-        setError(error.message)
-        setIsLoading(false);
-    };
-
-    useEffect(() => {
+    const subscriptionCallback = useCallback(() => {
         if (!user) {
-            setIsLoading(false);
+            setCards([]);
             return;
-		}
-
-        try {
-            const unsubscribe = cardService.getCardsByListId(listId, onSuccess, onError);
-            return () => unsubscribe?.();
-
-        } catch (error) {
-            onError(error);
         }
+        return cardService.getCardsByListId(listId, (cardsData) => {
+            setCards(cardsData);
+        });
+    }, [user, listId]);
 
-    }, [user]);
+    handleSubscription(subscriptionCallback, !!user && !!listId);
 
     return {
         cards,

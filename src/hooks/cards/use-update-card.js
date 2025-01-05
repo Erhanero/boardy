@@ -14,6 +14,7 @@ const useUpdateCard = () => {
 
 	/**
 	 * Update card.
+	 * 
 	 * @param {Object} cardData 
 	 * @param {String} cardId 
 	 * @returns {Promise<Object|Boolean>}
@@ -26,6 +27,7 @@ const useUpdateCard = () => {
 			await cardService.updateCard(cardData, cardId);						
 
 		} catch (error) {
+			console.error(error.message);
 			setError(error.message);
 			return false;
 			

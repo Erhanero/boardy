@@ -6,10 +6,10 @@ import { useState } from "react";
 /**
  * Internal dependencies.
  */
-import authService from "@/services/auth-service";
+import authService from '@/services/auth-service';
 
 export const useRegister = () => {
-    const [authError, setAuthError] = useState("");
+    const [authError, setAuthError] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
 
     /**
@@ -21,7 +21,7 @@ export const useRegister = () => {
     const signUp = async ({ email, password }) => {
         try {
             setIsLoading(true);
-            setAuthError("");
+            setAuthError(null);
 
             await authService.register(email, password);
 			return true;

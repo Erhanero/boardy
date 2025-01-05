@@ -8,7 +8,7 @@ import {
     where,
     onSnapshot,
     updateDoc,
-    addDoc
+    addDoc,
 } from 'firebase/firestore';
 import { db } from '@/services/firebase';
 
@@ -18,28 +18,23 @@ const boardService = {
      *
      * @param {String} userId
      * @param {Function} onSuccess
-     * @param {Function} onError
      * @returns {Function}
      */
-    getBoardsByUserId(userId, onSuccess, onError) {
-        try {
-            const userRef = doc(db, 'users', userId);
-            const boardsQuery = query(
-                collection(db, 'boards'),
-                where('owner', '==', userRef)
-            );
+    getBoardsByUserId(userId, onSuccess) {
+        const userRef = doc(db, 'users', userId);
+        const boardsQuery = query(
+            collection(db, 'boards'),
+            where('owner', '==', userRef)
+        );
 
-            return onSnapshot(boardsQuery, (snapshot) => {
-                const boardsData = snapshot.docs.map((doc) => ({
-                    id: doc.id,
-                    ...doc.data(),
-                }));
+        return onSnapshot(boardsQuery, (snapshot) => {
+            const boardsData = snapshot.docs.map((doc) => ({
+                id: doc.id,
+                ...doc.data(),
+            }));
 
-                onSuccess(boardsData);
-            });
-        } catch (error) {
-            onError?.(error);
-        }
+            onSuccess(boardsData);
+        });
     },
 
     /**
@@ -47,26 +42,21 @@ const boardService = {
      *
      * @param {String} boardId
      * @param {Function} onSuccess
-     * @param {Function} onError
      * @returns {Function}
      */
-    getBoardById(boardId, onSuccess, onError) {
-        try {
-            const boardRef = doc(db, 'boards', boardId);
-            return onSnapshot(boardRef, (doc) => {
-                if (doc.exists()) {
-                    onSuccess({
-                        id: doc.id,
-                        ...doc.data(),
-                    });
-
-                } else {
-                    onSuccess(null);
-                }
-            });
-        } catch (error) {
-            onError?.(error);
-        }
+    getBoardById(boardId, onSuccess) {
+        const boardRef = doc(db, 'boards', boardId);
+        
+        return onSnapshot(boardRef, (doc) => {
+            if (doc.exists()) {
+                onSuccess({
+                    id: doc.id,
+                    ...doc.data(),
+                });
+            } else {
+                onSuccess(null);
+            }
+        });
     },
 
     /**
@@ -77,38 +67,27 @@ const boardService = {
      * @returns {Promise}
      */
     async createBoard(data, userId) {
-        try {
-            const userRef = doc(db, 'users', userId);
-            const boardData = {
-                title: data.boardName,
-                owner: userRef,
-            };
+        const userRef = doc(db, 'users', userId);
+        const boardData = {
+            title: data.boardName,
+            owner: userRef,
+        };
 
-            return await addDoc(collection(db, 'boards'), boardData);
-
-        } catch (error) {
-            console.log(error.message)
-            throw new Error(error);
-        }
+        return await addDoc(collection(db, 'boards'), boardData);
     },
 
-      /**
+    /**
      * Update board.
      *
      * @param {Object} boardData
      * @param {String} userId
      * @returns {Promise}
      */
-      async updateBoard(boardData, boardId) {
-        try {
-            const boardRef = doc(db, 'boards', boardId);
-            return await updateDoc(boardRef, boardData);
-                        
-        } catch (error) {
-            throw new Error(error);
-        }
-    },
+    async updateBoard(boardData, boardId) {
+        const boardRef = doc(db, 'boards', boardId);
 
+        return await updateDoc(boardRef, boardData);
+    },
 };
 
 export default boardService;

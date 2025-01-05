@@ -8,7 +8,7 @@ import {
     where,
     onSnapshot,
     addDoc,
-    updateDoc
+    updateDoc,
 } from 'firebase/firestore';
 import { db } from '@/services/firebase';
 
@@ -18,70 +18,55 @@ const cardService = {
      *
      * @param {String} boardId
      * @param {Function} onSuccess
-     * @param {Function} onError
      * @returns {Function}
      */
-    getCardsByListId(listId, onSuccess, onError) {
-        try {
-            const listRef = doc(db, 'lists', listId);
-            const cardsQuery = query(
-                collection(db, 'cards'),
-                where('listId', '==', listRef)
-            );
+    getCardsByListId(listId, onSuccess) {
+        const listRef = doc(db, 'lists', listId);
+        const cardsQuery = query(
+            collection(db, 'cards'),
+            where('listId', '==', listRef)
+        );
 
-            return onSnapshot(cardsQuery, (snapshot) => {
-                const cardsData = snapshot.docs.map((doc) => ({
-                    id: doc.id,
-                    ...doc.data(),
-                }));
+        return onSnapshot(cardsQuery, (snapshot) => {
+            const cardsData = snapshot.docs.map((doc) => ({
+                id: doc.id,
+                ...doc.data(),
+            }));
 
-                onSuccess(cardsData);
-            });
-        } catch (error) {
-            onError?.(error);
-        }
-	},
+            onSuccess(cardsData);
+        });
+    },
 
     /**
      * Create card.
-     * @param {Object} data 
-     * @param {String} boardId 
-     * @param {String} listId 
+     * @param {Object} data
+     * @param {String} boardId
+     * @param {String} listId
      * @returns {Promise}
      */
-	async createCard(data, boardId, listId) {
-		try {
-			const boardRef = doc(db, 'boards', boardId);
-            const listRef = doc(db, 'lists', listId);
-            
-			const cardData = {
-				...data,
-				boardId: boardRef,
-				listId: listRef,
-            };
+    async createCard(data, boardId, listId) {
+        const boardRef = doc(db, 'boards', boardId);
+        const listRef = doc(db, 'lists', listId);
 
-			return await addDoc(collection(db, 'cards'), cardData);
+        const cardData = {
+            ...data,
+            boardId: boardRef,
+            listId: listRef,
+        };
 
-        } catch (error) {
-            throw new Error(error);        
-		}
+        return await addDoc(collection(db, 'cards'), cardData);
     },
-    
-     /**
+
+    /**
      * Update card.
-     * @param {Object} cardData 
-     * @param {String} cardId 
+     * @param {Object} cardData
+     * @param {String} cardId
      * @returns {Promise<void>}
      */
     async updateCard(cardData, cardId) {
-        try {
-            const cardRef = doc(db, 'cards', cardId);
-            await updateDoc(cardRef, cardData);            
-
-        } catch (error) {
-            throw new Error(error);
-        }
-    }
+        const cardRef = doc(db, 'cards', cardId);
+        await updateDoc(cardRef, cardData);
+    },
 };
 
 export default cardService;

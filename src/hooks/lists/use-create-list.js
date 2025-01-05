@@ -27,6 +27,7 @@ const useCreateList = () => {
 			return list;
 
 		} catch (error) {
+			console.error(error.message);
 			setError(error.message);
 			return false;
 			

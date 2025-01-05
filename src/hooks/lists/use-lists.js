@@ -32,6 +32,7 @@ const useLists = (boardId) => {
      * @returns {Void}
      */
     const onError = (error) => {
+        console.error(error.message);
         setError(error.message);
         setIsLoading(false);
     };

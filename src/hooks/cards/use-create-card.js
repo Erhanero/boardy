@@ -27,6 +27,7 @@ const useCreateCard = () => {
 			return card;
 
 		} catch (error) {
+			console.error(error.message);
 			setError(error.message);
 			return false;
 			
