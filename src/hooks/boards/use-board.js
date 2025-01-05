@@ -10,6 +10,7 @@ import boardService from '@/services/board-service';
 
 const useBoard = (boardId) => {
     const [board, setBoard] = useState(null);
+    const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
 
     /**
@@ -21,6 +22,7 @@ const useBoard = (boardId) => {
     const onSuccess = (boardData) => {
         setBoard(boardData);
         setIsLoading(false);
+        setError(null);
     };
 
 	/**
@@ -30,7 +32,7 @@ const useBoard = (boardId) => {
 	 * @returns {Void}
 	 */
     const onError = (error) => {
-        console.error(error);
+        setError(error.message);
         setIsLoading(false);
     };
 
@@ -40,18 +42,19 @@ const useBoard = (boardId) => {
             return;
         }
 
-        const unsubscribe = boardService.getBoardById(boardId, onSuccess, onError);
-
-        return () => {
-            if (typeof unsubscribe === 'function') {
-                unsubscribe();
-            }
-        };
+        try {
+            const unsubscribe = boardService.getBoardById(boardId, onSuccess, onError);
+            return () => unsubscribe?.();
+            
+        } catch (error) {
+            onError(error);
+        }
     }, [boardId]);
 
     return {
         board,
         isLoading,
+        error
     };
 };
 

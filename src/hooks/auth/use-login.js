@@ -9,7 +9,7 @@ import { useState } from 'react';
 import authService from '@/services/auth-service';
 
 export const useLogin = () => {
-    const [authError, setAuthError] = useState('');
+    const [authError, setAuthError] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
 
     /**
@@ -21,12 +21,13 @@ export const useLogin = () => {
     const signIn = async ({ email, password }) => {
         try {
             setIsLoading(true);
-            setAuthError('');
+            setAuthError(null);
             
             await authService.login(email, password);
             return true;
 
         } catch (error) {
+            console.log(error.message)
             setAuthError(error.message);
             return false;
             

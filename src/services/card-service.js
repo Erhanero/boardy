@@ -63,7 +63,7 @@ const cardService = {
 			return await addDoc(collection(db, 'cards'), cardData);
 
         } catch (error) {
-            throw new Error('Failed to create card: ' + error.message);
+            throw new Error(error);        
 		}
     },
     
@@ -76,10 +76,10 @@ const cardService = {
     async updateCard(cardData, cardId) {
         try {
             const cardRef = doc(db, 'cards', cardId);
-            return await updateDoc(cardRef, cardData);
+            await updateDoc(cardRef, cardData);            
 
         } catch (error) {
-            throw new Error('Failed to update card: ' + error.message);
+            throw new Error(error);
         }
     }
 };

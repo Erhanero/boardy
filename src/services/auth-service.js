@@ -31,7 +31,7 @@ export const authService = {
 			await setPersistence(auth, browserSessionPersistence);
 			
         } catch (error) {
-            throw new Error(authErrorMessages[error.code] || 'An error occurred during login');
+            throw new Error(authErrorMessages[error.code]);
         }
     },
 
@@ -51,7 +51,7 @@ export const authService = {
 			await signInWithEmailAndPassword(auth, email, password);
 			
         } catch (error) {
-			throw new Error(authErrorMessages[error.code] || 'An error occurred during login');
+			throw new Error(authErrorMessages[error.code]);
         }
     },
 

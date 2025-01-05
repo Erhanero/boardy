@@ -12,6 +12,7 @@ import cardService from '@/services/card-service';
 const useCards = (listId) => {
     const [cards, setCards] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null)
     const { user } = useAuth();
 
     /**
@@ -23,6 +24,7 @@ const useCards = (listId) => {
     const onSuccess = (cardsData) => {
         setCards(cardsData);
         setIsLoading(false);
+        setError(null);
     };
 
     /**
@@ -32,7 +34,7 @@ const useCards = (listId) => {
      * @returns {Void}
      */
     const onError = (error) => {
-        console.error(error.message);
+        setError(error.message)
         setIsLoading(false);
     };
 
@@ -42,18 +44,20 @@ const useCards = (listId) => {
             return;
 		}
 
-		const unsubscribe = cardService.getCardsByListId(listId, onSuccess, onError);
+        try {
+            const unsubscribe = cardService.getCardsByListId(listId, onSuccess, onError);
+            return () => unsubscribe?.();
 
-		return () => {
-			if (typeof unsubscribe === 'function') {
-				unsubscribe();
-			}
-		};
+        } catch (error) {
+            onError(error);
+        }
+
     }, [user]);
 
     return {
         cards,
         isLoading,
+        error
     };
 };
 

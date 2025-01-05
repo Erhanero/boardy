@@ -6,24 +6,24 @@ import { useState } from 'react';
 /**
  * Internal dependencies.
  */
-import cardService from '@/services/card-service';
+import listService from '@/services/list-service';
 
-const useUpdateCard = () => {
+const useUpdateList = () => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState(null);
 
 	/**
-	 * Update card.
-	 * @param {Object} cardData 
-	 * @param {String} cardId 
+	 * Update list.
+	 * @param {Object} listData 
+	 * @param {String} listId 
 	 * @returns {Promise<Object|Boolean>}
 	 */
-	const updateCard = async (cardData, cardId) => {
+	const updateList = async (listData, listId) => {
 		try {
 			setIsLoading(true);
 			setError(null);			
 
-			await cardService.updateCard(cardData, cardId);						
+			await listService.updateList(listData, listId);						
 
 		} catch (error) {
 			setError(error.message);
@@ -35,10 +35,10 @@ const useUpdateCard = () => {
 	}
 
 	return {
-		updateCard,
+		updateList,
 		isLoading,
 		error
 	}
 }
 
-export default useUpdateCard;
+export default useUpdateList;

@@ -18,11 +18,10 @@ export const useLogout = () => {
      * @returns {Promise<void>}
      */
     const logout = async () => {
-        
         try {
             await authService.logout();
-
             navigate('/login');
+
         } catch (error) {
             console.error(error.message);
         }

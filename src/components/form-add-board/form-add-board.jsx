@@ -30,9 +30,9 @@ const FormAddBoard = () => {
 
 	const fields = [
 		{
-			id: 'boardTitle',
-			name: 'boardTitle',
-			validation: { required: 'Title is required' },
+			id: 'boardName',
+			name: 'boardName',
+			validation: { required: 'Board name is required' },
 			type: 'text',
 		}
 	];
@@ -48,7 +48,7 @@ const FormAddBoard = () => {
 
 			{fields.map(({ id, name, label, validation, type }) => (
 				<div className="form__group" key={id}>
-					<InputField {...register(name, validation)} type={type} name={name} id={id} placeholder="Enter board title" />
+					<InputField {...register(name, validation)} type={type} name={name} id={id} placeholder="Enter board name" />
 
 					{errors[name] && (
 						<span className="form__error">{errors[name]?.message}</span>

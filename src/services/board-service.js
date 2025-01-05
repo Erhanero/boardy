@@ -7,6 +7,7 @@ import {
     query,
     where,
     onSnapshot,
+    updateDoc,
     addDoc
 } from 'firebase/firestore';
 import { db } from '@/services/firebase';
@@ -79,13 +80,32 @@ const boardService = {
         try {
             const userRef = doc(db, 'users', userId);
             const boardData = {
-                title: data.boardTitle,
+                title: data.boardName,
                 owner: userRef,
             };
 
             return await addDoc(collection(db, 'boards'), boardData);
+
         } catch (error) {
-            throw error;
+            console.log(error.message)
+            throw new Error(error);
+        }
+    },
+
+      /**
+     * Update board.
+     *
+     * @param {Object} boardData
+     * @param {String} userId
+     * @returns {Promise}
+     */
+      async updateBoard(boardData, boardId) {
+        try {
+            const boardRef = doc(db, 'boards', boardId);
+            return await updateDoc(boardRef, boardData);
+                        
+        } catch (error) {
+            throw new Error(error);
         }
     },
 

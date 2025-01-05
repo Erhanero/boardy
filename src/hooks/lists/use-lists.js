@@ -8,19 +8,21 @@ import { useEffect, useState } from 'react';
  */
 import listService from '@/services/list-service';
 
-const useLists = (boardId ) => {
+const useLists = (boardId) => {
     const [lists, setLists] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    
-      /**
+    const [error, setError] = useState(null);
+
+    /**
      * On success.
      *
      * @param {Object} listsData
      * @returns {Void}
      */
-      const onSuccess = (listsData) => {
+    const onSuccess = (listsData) => {
         setLists(listsData);
         setIsLoading(false);
+        setError(null);
     };
 
     /**
@@ -30,27 +32,33 @@ const useLists = (boardId ) => {
      * @returns {Void}
      */
     const onError = (error) => {
-        console.error(error.message);
+        setError(error.message);
         setIsLoading(false);
     };
 
-	useEffect(() => {
-        if (!boardId) return;
-
+    useEffect(() => {
+        if (!boardId) {
+            return;
+        }
         setIsLoading(true);
 
-        const unsubscribe = listService.getListsByBoardId(boardId, onSuccess, onError);
-
-        return () => {
-            if (typeof unsubscribe === 'function') {
-                unsubscribe();
-            }
-        };
+        try {
+            const unsubscribe = listService.getListsByBoardId(
+                boardId,
+                onSuccess,
+                onError
+            );
+            return () => unsubscribe?.();
+            
+        } catch (error) {
+            onError(error);
+        }
     }, [boardId]);
 
     return {
         lists,
         isLoading,
+        error
     };
 };
 

@@ -30,13 +30,20 @@ const FormCard = ({ cardData, listId, boardId, onSuccess, mode = 'create' }) => 
 	})
 
 	const onSubmit = async (data) => {
-		if (isEditMode) {
-			await updateCard(data, cardData.id);
-			
-        } else {
-            await createCard(data, boardId, listId);
-        }
-        onSuccess?.();
+		try {
+			if (isEditMode) {
+				await updateCard(data, cardData.id);
+				onSuccess?.();
+
+			} else {
+				const result = await createCard(data, boardId, listId);
+				if (result) {
+					onSuccess?.();
+				}
+			}
+		} catch (error) {
+			console.error( error.message);
+		}
 	}
 
 	const fields = [

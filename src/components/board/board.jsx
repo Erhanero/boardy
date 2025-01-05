@@ -16,11 +16,17 @@ import useBoard from '@/hooks/boards/use-board';
 import Button from '@/components/button/button';
 import FormAddList from '@/components/form-add-list/form-add-list';
 import Popover from '@/components/popover/popover';
+import useUpdateBoard from '@/hooks/boards/use-update-board';
 
 const Board = () => {
     const { boardId } = useParams();
     const { board, isLoading: isBoardLoading } = useBoard(boardId);
     const { lists, isLoading: isListsLoading } = useLists(boardId);
+    const { updateBoard } = useUpdateBoard();
+
+    const handleBoardTitleUpdate = async (updatedTitle) => {  
+        await updateBoard({ title: updatedTitle }, boardId);
+    }
 
     const renderContent = () => {
         if (isListsLoading) {
@@ -28,9 +34,14 @@ const Board = () => {
         }
 
         return lists.map((list) => (
-            <BoardList boardId={boardId} key={list.id} listId={list.id} title={list.title} />
+            <BoardList
+                boardId={boardId}
+                key={list.id}
+                listId={list.id}
+                title={list.title}
+            />
         ));
-    };
+    };   
 
     if (!board && !isBoardLoading) {
         return <p style={{ padding: '50px', textAlign: 'center' }}>Board not found</p>;
@@ -39,7 +50,13 @@ const Board = () => {
     return (
         <div className="board">
             <div className="board__head">
-                {!isBoardLoading && <EditableText initialText={board.title} fontSize="22px" />}
+                {!isBoardLoading &&
+                    <EditableText
+                        initialText={board.title}
+                        fontSize="22px"
+                        onBlur={handleBoardTitleUpdate}
+                    />
+                }
             </div>
 
             <Stack className="board__inner" alignItems="flex-start" columnGap="20" >

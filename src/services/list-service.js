@@ -7,6 +7,7 @@ import {
     query,
     where,
     onSnapshot,
+    updateDoc,
     addDoc,
 } from "firebase/firestore";
 import { db } from "@/services/firebase";
@@ -60,7 +61,23 @@ const listService = {
 			return await addDoc(collection(db, 'lists'), listData);
 			
         } catch (error) {
-            throw new Error('Failed to create list: ' + error.message);
+            throw new Error(error);
+        }
+    },
+    /**
+     * Update list.
+     *
+     * @param {Object} listData
+     * @param {String} listId
+     * @returns {Promise<void>}
+     */
+    async updateList(listData, listId) {
+        try {
+            const listRef = doc(db, 'lists', listId);
+            await updateDoc(listRef, listData);
+            
+        } catch (error) {
+            throw new Error(error);
         }
     },
 };

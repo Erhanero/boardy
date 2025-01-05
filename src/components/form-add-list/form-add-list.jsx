@@ -20,8 +20,11 @@ const FormAddList = ({boardId, onSuccess}) => {
 	} = useForm()
 
 	const onSubmit = async (data) => {
-		await createList(data, boardId);
-		onSuccess?.();
+		const result = await createList(data, boardId);
+		
+        if (result) {
+            onSuccess?.();
+        }
 	}
 
 	const fields = [

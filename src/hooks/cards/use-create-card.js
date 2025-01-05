@@ -19,15 +19,14 @@ const useCreateCard = () => {
 	 * @returns {Promise<void>}
 	 */
 	const createCard = async (data, boardId, listId) => {
+		setIsLoading(true);
+		setError(null);
+		
 		try {
-			setIsLoading(true);
-			setError(null);			
-
 			const card = await cardService.createCard(data, boardId, listId);
 			return card;
 
 		} catch (error) {
-			console.log(error.message)
 			setError(error.message);
 			return false;
 			

@@ -4,7 +4,7 @@
 import { useState, useRef, useEffect } from 'react';
 import classNames from 'classnames';
 
-const EditableText = ({ initialText, fontSize = '16px', className }) => {
+const EditableText = ({ initialText, fontSize = '16px', className, onBlur }) => {
 	const [text, setText] = useState(initialText);
 	const textareaRef = useRef(null);
 	const [textHeight, setTextHeight] = useState('auto');
@@ -31,6 +31,30 @@ const EditableText = ({ initialText, fontSize = '16px', className }) => {
 		setText(e.target.value);
 	}
 
+	/**
+	 * Handle key down.
+	 * 
+	 * @param {Event} e 
+	 * @returns {Void}
+	 */
+	const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            textareaRef.current.blur();
+        }
+    }
+
+	/**
+	 * Handle blur.
+	 * 
+	 * @returns {Void}
+	 */
+    const handleBlur = () => {
+        if (text !== initialText) {
+            onBlur?.(text);
+        }
+    }
+
 	return (
 		<div
 			className={classNames("editable-text", className)}
@@ -41,6 +65,8 @@ const EditableText = ({ initialText, fontSize = '16px', className }) => {
 			<textarea
 				value={text}
 				onChange={handleTextchange}
+				onKeyDown={handleKeyDown}
+                onBlur={handleBlur}
 				ref={textareaRef}
 			>{text}</textarea>
 
