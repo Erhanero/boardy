@@ -9,6 +9,8 @@ import {
     onSnapshot,
     updateDoc,
     addDoc,
+    getDocs,
+    deleteDoc
 } from 'firebase/firestore';
 import { db } from '@/services/firebase';
 
@@ -87,6 +89,42 @@ const boardService = {
         const boardRef = doc(db, 'boards', boardId);
 
         return await updateDoc(boardRef, boardData);
+    },
+
+     /**
+     * Delete board and all its lists and cards.
+     *
+     * @param {String} boardId
+     * @returns {Promise}
+     */
+     async deleteBoardAndAllItsListsAndCards(boardId) {
+        const boardRef = doc(db, 'boards', boardId);
+        
+        const listsQuery = query(
+            collection(db, 'lists'),
+            where('boardId', '==', boardRef)
+        );
+        const listsSnapshot = await getDocs(listsQuery);
+        
+        const deletePromises = listsSnapshot.docs.map(async (listDoc) => {
+            const listRef = doc(db, 'lists', listDoc.id);
+            
+            const cardsQuery = query(
+                collection(db, 'cards'),
+                where('listId', '==', listRef)
+            );
+            const cardsSnapshot = await getDocs(cardsQuery);
+            const cardDeletePromises = cardsSnapshot.docs.map(cardDoc =>
+                deleteDoc(doc(db, 'cards', cardDoc.id))
+            );
+            
+            await Promise.all(cardDeletePromises);
+            return deleteDoc(listRef);
+        });
+        
+        await Promise.all(deletePromises);
+        
+        return deleteDoc(boardRef);
     },
 };
 

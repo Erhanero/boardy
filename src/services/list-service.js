@@ -9,6 +9,8 @@ import {
     onSnapshot,
     updateDoc,
     addDoc,
+    deleteDoc,
+    getDocs,
 } from 'firebase/firestore';
 import { db } from '@/services/firebase';
 
@@ -64,6 +66,29 @@ const listService = {
         const listRef = doc(db, 'lists', listId);
         
         await updateDoc(listRef, listData);
+    },
+
+     /**
+     * Delete list and all its cards.
+     *
+     * @param {String} listId
+     * @returns {Promise<void>}
+     */
+     async deleteListAndAllItsCards(listId) {
+        const listRef = doc(db, 'lists', listId);
+        
+        const cardsQuery = query(
+            collection(db, 'cards'),
+            where('listId', '==', listRef)
+        );
+        
+        const cardsSnapshot = await getDocs(cardsQuery);
+        const deletePromises = cardsSnapshot.docs.map(cardDoc => 
+            deleteDoc(doc(db, 'cards', cardDoc.id))
+        );
+        
+        await Promise.all(deletePromises);        
+        await deleteDoc(listRef);
     },
 };
 

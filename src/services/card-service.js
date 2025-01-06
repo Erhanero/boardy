@@ -9,6 +9,7 @@ import {
     onSnapshot,
     addDoc,
     updateDoc,
+    deleteDoc,
 } from 'firebase/firestore';
 import { db } from '@/services/firebase';
 
@@ -66,6 +67,16 @@ const cardService = {
     async updateCard(cardData, cardId) {
         const cardRef = doc(db, 'cards', cardId);
         await updateDoc(cardRef, cardData);
+    },
+
+    /**
+     * Delete card by id.
+     * @param {String} cardId
+     * @returns {Promise<void>}
+     */
+      async deleteCardById(cardId) {
+        const cardRef = doc(db, 'cards', cardId);
+        await deleteDoc(cardRef);
     },
 };
 
