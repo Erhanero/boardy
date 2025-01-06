@@ -14,6 +14,7 @@ const useUpdateList = () => {
 
 	/**
 	 * Update list.
+	 * 
 	 * @param {Object} listData 
 	 * @param {String} listId 
 	 * @returns {Promise<Object|Boolean>}

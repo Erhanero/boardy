@@ -13,9 +13,10 @@ const useCreateList = () => {
 	const [error, setError] = useState(null);
 
 	/**
-	 * Create board.
+	 * Create list.
 	 *
 	 * @param {Object} data
+	 * @param {string} boardId
 	 * @returns {Promise<void>}
 	 */
 	const createList = async (data, boardId) => {

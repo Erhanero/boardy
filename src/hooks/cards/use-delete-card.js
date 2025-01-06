@@ -10,6 +10,13 @@ import { toast } from 'react-hot-toast';
 import cardService from '@/services/card-service';
 
 const useDeleteCard = () => {
+
+    /**
+     * Delete card.
+     * 
+     * @param {string} cardId
+     * @returns {Promise<void>}
+     */
     const deleteCard = useCallback(async (cardId) => {
         try {
             await cardService.deleteCardById(cardId);

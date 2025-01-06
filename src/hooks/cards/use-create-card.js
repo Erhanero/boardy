@@ -13,9 +13,11 @@ const useCreateCard = () => {
 	const [error, setError] = useState(null);
 
 	/**
-	 * Create board.
+	 * Create card.
 	 *
 	 * @param {Object} data
+	 * @param {string} boardId
+	 * @param {string} listId
 	 * @returns {Promise<void>}
 	 */
 	const createCard = async (data, boardId, listId) => {

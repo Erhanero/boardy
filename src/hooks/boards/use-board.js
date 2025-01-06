@@ -43,7 +43,7 @@ const useBoard = (boardId) => {
         }
 
         try {
-            const unsubscribe = boardService.getBoardById(boardId, onSuccess, onError);
+            const unsubscribe = boardService.getBoardById(boardId, onSuccess);
             return () => unsubscribe?.();
             
         } catch (error) {

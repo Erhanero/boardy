@@ -10,6 +10,13 @@ import { toast } from 'react-hot-toast';
 import listService from '@/services/list-service';
 
 const useDeleteList = () => {
+
+    /**
+     * Delete list.
+     * 
+     * @param {string} listId
+     * @returns {Promise<void>}
+     */
     const deleteList = useCallback(async (listId) => {
         try {
             await listService.deleteListAndAllItsCards(listId);
