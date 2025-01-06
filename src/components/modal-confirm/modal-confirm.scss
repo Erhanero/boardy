@@ -1,0 +1,23 @@
+// ==========================================================================
+// Modal confirm
+// ==========================================================================
+
+.modal-confirm {
+	text-align: center;
+	color: var(--c-base);
+	font-size: 1.8rem;
+
+	.modal-confirm__message {
+		margin-block: 2rem;
+	}
+
+	.modal-confirm__title {
+		color: var(--c-base);
+	}
+
+	.modal-confirm__actions {
+		display: flex;
+		gap: 2rem;
+		justify-content: center;
+	}
+}

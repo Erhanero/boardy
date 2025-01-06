@@ -109,7 +109,7 @@ const Popover = (props) => {
 	return (
 		<>
 			<div
-				className="popover-trigger"
+    	        className={`popover-trigger ${isOpen ? 'is-active' : ''}`}
 				ref={triggerRef}
 				onClick={togglePopover}
 				style={triggerStyle}

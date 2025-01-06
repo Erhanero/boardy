@@ -20,6 +20,12 @@ const Cards = ({ listId, boardId }) => {
     const [isEditMode, setIsEditMode] = useState(false);
     const [selectedCard, setSelectedCard] = useState(null);
 
+    /**
+     * Card click handler.
+     * 
+     * @param {Object} cardData 
+     * @returns {Void}
+     */
     const cardClickHandler = (cardData) => {
         setIsEditMode(true);
         setShowModal(true);
@@ -39,12 +45,10 @@ const Cards = ({ listId, boardId }) => {
 
     /**
      * Handle open modal.
-     * 
-     * @param {Event} e 
+     *      
      * @returns {Void}
      */
-    const handleOpenModal = (e) => {
-        e.stopPropagation();
+    const handleOpenModal = () => {
         setShowModal(true);
     };
 

@@ -17,7 +17,7 @@
 
 @import '@/components/stack/stack.scss';
 @import '@/components/board/board.scss';
-@import '@/components/board-list/board-list.scss';
+@import '@/components/list-board/list-board.scss';
 @import '@/components/cards/cards.scss';
 @import '@/components/card/card.scss';
 @import '@/components/editable-text/editable-text.scss';
@@ -31,3 +31,5 @@
 @import '@/components/box-board/box-board.scss';
 @import '@/components/section/section.scss';
 @import '@/components/popover/popover.scss';
+@import '@/components/nav-actions/nav-actions.scss';
+@import '@/components/modal-confirm/modal-confirm.scss';

@@ -41,9 +41,34 @@
 	}
 }
 
+
+//
+// Button red
+// ==========================================================================
+.button--red {
+	background-color: var(--c-red);	
+	padding: .4rem;
+	color: var(--c-white);
+
+	&:hover {
+		background-color: var(--c-darkred);
+	}
+}
+
 //
 // Button lightblue
 // ==========================================================================
 .button--lightblue {
 	background-color: var(--c-lightblue);
+}
+
+//
+// Button icon
+// ==========================================================================
+.button--icon {
+	background-color: transparent;
+	min-width: auto;
+	min-height: auto;
+	box-shadow: none;
+	padding: .4rem;
 }
