@@ -16,11 +16,13 @@ const useLists = (boardId) => {
     /**
      * On success.
      *
-     * @param {Object} listsData
+     * @param {Object} lists
      * @returns {Void}
      */
-    const onSuccess = (listsData) => {
-        setLists(listsData);
+    const onSuccess = (lists) => {
+        lists.sort((a, b) => a.position - b.position);
+        
+        setLists(lists);
         setIsLoading(false);
         setError(null);
     };

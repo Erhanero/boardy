@@ -140,7 +140,11 @@ const Board = () => {
                 onClose={() => setIsModalConfirmOpen(false)}
                 onConfirm={handleDeleteConfirm}
                 title="Delete Board"
-                message="Are you sure you want to delete this board? All cards and lists in this board will be deleted too."
+                message={
+                    <>
+                        Are you sure you want to delete this board? <br/> All cards and lists in this board will be deleted too.
+                    </>
+                }
             />
         </div>
     );
