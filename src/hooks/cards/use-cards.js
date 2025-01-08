@@ -18,11 +18,13 @@ const useCards = (listId) => {
     /**
      * On success.
      *
-     * @param {Object} cardsData
+     * @param {Object} cards
      * @returns {Void}
      */
-    const onSuccess = (cardsData) => {
-        setCards(cardsData);
+    const onSuccess = (cards) => {
+        cards.sort((a, b) => a.position - b.position);
+
+        setCards(cards);
         setIsLoading(false);
     };
 
