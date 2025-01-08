@@ -1,7 +1,12 @@
 /**
  * External dependencies.
  */
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import {
+	draggable,
+	dropTargetForElements,
+} from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
+import classNames from 'classnames';
 
 /**
  * Internal dependencies.
@@ -18,7 +23,25 @@ import ModalConfirm from '@/components/modal-confirm/modal-confirm';
 const ListBoard = ({ boardId, listId, title }) => {
 	const { updateList } = useUpdateList();
 	const { deleteList } = useDeleteList();
-    const [isModalConfirmOpen, setIsModalConfirmOpen] = useState(false);
+	const [isModalConfirmOpen, setIsModalConfirmOpen] = useState(false);
+	const ref = useRef(null);
+    const [isDraggedOver, setIsDraggedOver] = useState(false);
+
+	useEffect(() => {
+		const el = ref.current;
+
+		if (!el) {
+			return;
+		}
+
+		dropTargetForElements({
+			element: el,
+			onDragEnter: () => setIsDraggedOver(true),
+			onDragLeave: () => setIsDraggedOver(false),
+			onDrop: () => setIsDraggedOver(false),
+		});
+		
+	},[]);
 
 	/**
 	 * Update list title.
@@ -55,7 +78,7 @@ const ListBoard = ({ boardId, listId, title }) => {
     }
 
 	return (
-		<div className="list-board">
+		<div className={classNames('list-board', { 'is-dragged-over': isDraggedOver })} ref={ref}>
 			<div className="list__head">
 				<EditableText initialText={title} onBlur={updateListTitle} className="list__title" />
 
@@ -83,11 +106,15 @@ const ListBoard = ({ boardId, listId, title }) => {
 			<Cards listId={listId} boardId={boardId} />
 
 			<ModalConfirm
-                isOpen={isModalConfirmOpen}
-                onClose={() => setIsModalConfirmOpen(false)}
-                onConfirm={handleDeleteConfirm}
-                title="Delete List"
-                message="Are you sure you want to delete this list?  All cards in this list will be deleted too."
+				isOpen={isModalConfirmOpen}
+				onClose={() => setIsModalConfirmOpen(false)}
+				onConfirm={handleDeleteConfirm}
+				title="Delete List"
+				message={
+					<>
+						Are you sure you want to delete this list? <br/>  All cards in this list will be deleted too.
+					</>
+				}
             />
 		</div>
 	);

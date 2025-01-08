@@ -68,6 +68,7 @@ const Cards = ({ listId, boardId }) => {
                             description={card.description}
                             label={card.label}
                             onClick={cardClickHandler}
+                            listId={listId}
                         />;
                     })}
                 </Stack>

@@ -1,7 +1,12 @@
 /**
  * External dependencies.
  */
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
+import {
+	draggable,
+	dropTargetForElements,
+} from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
+import classNames from 'classnames';
 
 /**
  * Internal dependencies.
@@ -10,13 +15,31 @@ import ModalConfirm from '@/components/modal-confirm/modal-confirm';
 import Button from '@/components/button/button';
 import useDeleteCard from '@/hooks/cards/use-delete-card';
 
-const Card = ({ id, title, description, label, onClick }) => {
+const Card = ({ id, title, description, label, onClick, listId }) => {
 	const [isModalConfirmOpen, setIsModalConfirmOpen] = useState(false);
 	const { deleteCard } = useDeleteCard(id);
+	const [isDragging, setIsDragging] = useState(false);
+	const ref = useRef(null);
+
+	useEffect(() => {
+		const el = ref.current;
+
+		if (!el) {
+			return;
+		}
+
+		return draggable({
+			element: el,
+			onDragStart: () => setIsDragging(true),
+			onDrop: () => setIsDragging(false)
+		});
+	}, []);
 
 	/**
 	 * Handle delete click.
-	 * @param {*} e 
+	 * 
+	 * @param {Event} e 
+	 * @returns {Void}
 	 */
 	const handleDeleteClick = (e) => {
 		e.stopPropagation();
@@ -40,7 +63,7 @@ const Card = ({ id, title, description, label, onClick }) => {
 
 	return (
 		<>
-			<div className="card" onClick={() => onClick({ id, title, description, label })}>
+			<div className={classNames('card', { 'is-dragging': isDragging })} onClick={() => onClick({ id, title, description, label })} ref={ref}>
 				<div className="card__head">
 					<h3 className="card__title">{title}</h3>
 
