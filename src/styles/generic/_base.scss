@@ -12,8 +12,8 @@ body {
     font-weight: var(--fw-base);
     font-size: var(--fz-base);
     line-height: var(--lh-base);
-    color: var(--c-base);
-    background-color: var(--c-neutral);
+    color: var(--c-gray-900);
+    background-color: var(--c-gray-100);
 
     @include breakpoint-down(mobile-small) {
         font-size: 1.6rem;
@@ -123,7 +123,7 @@ blockquote:last-child {
 }
 
 .bg-blue {
-    background-color: var(--c-blue);
+    background-color: var(--c-blue-500);
 }
 
 .text-sm {
@@ -143,5 +143,5 @@ blockquote:last-child {
 }
 
 .text-blue {
-    color: var(--c-blue);
+    color: var(--c-blue-500);
 }

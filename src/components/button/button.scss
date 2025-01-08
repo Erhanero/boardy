@@ -20,8 +20,9 @@
 	min-height: 3.6rem;
 	min-width: 20rem;
 
-	&:hover {
-		background-color: var(--c-blue);
+	&:hover,
+	.is-active &  {
+		background-color: var(--c-blue-500);
 		color: var(--c-white);
 	}
 }
@@ -31,27 +32,25 @@
 // ==========================================================================
 
 .button--blue {
-	background-color: var(--c-blue);
+	background-color: var(--c-blue-500);
 	color: var(--c-white);	
-	border: 2px solid var(--c-blue);
 
 	&:hover {
-		background-color: var(--c-white);
-		color: var(--c-blue);
+		background-color: var(--c-blue-100);
+		color: var(--c-gray-900);
 	}
 }
-
 
 //
 // Button red
 // ==========================================================================
 .button--red {
-	background-color: var(--c-red);	
+	background-color: var(--c-red-500);	
 	padding: .4rem;
 	color: var(--c-white);
 
 	&:hover {
-		background-color: var(--c-darkred);
+		background-color: var(--c-red-700);
 	}
 }
 
@@ -59,7 +58,7 @@
 // Button lightblue
 // ==========================================================================
 .button--lightblue {
-	background-color: var(--c-lightblue);
+	background-color: var(--c-blue-100);
 }
 
 //

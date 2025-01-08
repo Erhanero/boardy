@@ -5,15 +5,20 @@
 .card {
 	font-size: 1.4rem;
 	border-radius: .6rem;
-	background-color: var(--c-blue);
+	background-color: var(--c-blue-500);
 	color: var(--c-white);
 	padding: 1rem 1.4rem;
 	box-shadow: 1px 1px 11px -4px rgba(0, 0, 0, 0.6);
-	transition: background-color var(--t-duration);
+	transition: background-color opacity;
+	transition-duration: var(--t-duration);
 	cursor: pointer;
 
+	&.is-dragging {
+		opacity: .7;
+	}
+
 	&:hover {
-		background-color: var(--c-darkblue);
+		background-color: var(--c-blue-700);
 	}
 
 	.card__head {

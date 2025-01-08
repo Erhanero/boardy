@@ -3,27 +3,38 @@
 // ==========================================================================
 
 :root {
-	--fz-html: 62.5%;
-	--fz-base: 1.8rem;
-	--fw-base: 500;
-	--lh-base: 1.2;
-	--ff-base: 'Helvetica Neue', Helvetica, Arial, sans-serif;	
-	--t-duration: .3s;
-	--c-base: #323232;
-	--c-white: #fff;
-	--c-neutral: #F6F6F6;
-	--c-black: #000;
-	--c-blue: #1E8FFF;
-	--c-red: #f94e4e;
-	--c-darkred: #dc3939;
-	--c-gray: #aaaa;
-	--c-lightblue: #e1eaf7;
-	--c-darkblue: #056dd4;
+    --fz-html: 62.5%;
+    --fz-base: 1.8rem;
+    --fw-base: 500;
+    --lh-base: 1.2;
+    --ff-base: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    --t-duration: 0.3s;
+
+    //Colors
+    // Base
+    --c-white: #fff;
+    --c-black: #000;
+
+    //Blue
+    --c-blue-100: #e1eaf7;
+    --c-blue-200: #bcd6ff;
+    --c-blue-500: #1e8fff;
+    --c-blue-700: #056dd4;
+
+    // Red
+    --c-red-500: #f94e4e;
+    --c-red-700: #dc3939;
+
+    // Gray
+    --c-gray-100: #f6f6f6;
+    --c-gray-300: #3232322e;
+    --c-gray-500: #aaaa;
+    --c-gray-900: #323232;
 }
 
 $breakpoints: (
-	mobile-small: 374px,
-	mobile: 767px,
-	tablet: 1023px,
-	small-desktop: 1199px,
+    mobile-small: 374px,
+    mobile: 767px,
+    tablet: 1023px,
+    small-desktop: 1199px,
 );
