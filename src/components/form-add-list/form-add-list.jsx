@@ -31,7 +31,7 @@ const FormAddList = ({boardId, onSuccess}) => {
 		{
 			id: 'listTitle',
 			name: 'listTitle',
-			validation: { required: 'Name is required' },
+			validation: { required: 'Please enter a title for the list.' },
 			type: 'text',
 		}
 	];

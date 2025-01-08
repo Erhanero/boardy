@@ -32,7 +32,7 @@ const FormAddBoard = () => {
 		{
 			id: 'boardName',
 			name: 'boardName',
-			validation: { required: 'Board name is required' },
+			validation: { required: 'Please enter a name for the board.' },
 			type: 'text',
 		}
 	];
