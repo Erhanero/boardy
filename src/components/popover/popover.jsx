@@ -2,7 +2,7 @@
  * External dependencies.
  */
 import { useState, useEffect, useRef } from 'react';
-import ReactDOM from 'react-dom';
+import {createPortal} from 'react-dom';
 
 const Popover = (props) => {
 	const {
@@ -117,7 +117,7 @@ const Popover = (props) => {
 				{trigger}
 			</div>
 
-			{ReactDOM.createPortal(
+			{createPortal(
 				isOpen && (
 					<div ref={popoverRef} className="popover">
 						{typeof children === 'function' ? children(closePopover) : children}

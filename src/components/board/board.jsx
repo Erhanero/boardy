@@ -1,8 +1,11 @@
 /**
  * External dependencies.
  */
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
+import {DndContext, DragOverlay, useSensors, useSensor, PointerSensor} from '@dnd-kit/core';
+import { SortableContext, arrayMove } from '@dnd-kit/sortable';
+import {createPortal} from 'react-dom';
 
 /**
  * Internal dependencies.
@@ -20,14 +23,20 @@ import useUpdateBoard from '@/hooks/boards/use-update-board';
 import NavActions from '@/components/nav-actions/nav-actions';
 import ModalConfirm from '@/components/modal-confirm/modal-confirm';
 import useDeleteBoard from '@/hooks/boards/use-delete-board';
+import listService from '@/services/list-service';
 
 const Board = () => {
     const { boardId } = useParams();
     const { board, isLoading: isBoardLoading } = useBoard(boardId);
     const { lists, isLoading: isListsLoading } = useLists(boardId);
+    const [ localLists, setLocalLists ] = useState(null);
     const { deleteBoard } = useDeleteBoard();
     const { updateBoard } = useUpdateBoard();
     const [isModalConfirmOpen, setIsModalConfirmOpen] = useState(false);
+    const listsId = useMemo(() => lists.map(list => list.id),
+        [lists]);
+    const [draggingList, setDraggingList] = useState(null);
+    const currentLists = localLists || lists;
 
     /**
      * Update board title.
@@ -63,17 +72,65 @@ const Board = () => {
         }
     }
 
+    const onDragStart = (e) => {
+        if (e.active.data.current.type !== "List") {
+            return;
+        }
+        
+       setDraggingList(e.active.data.current.list);
+    }
+
+    const onDragEnd = async(e) => {
+        if (!e.over && e.over.data.current.type !== "List") {
+            return;
+        }
+
+        const activeListId = e.active.id;
+        const overListId = e.over.id;
+
+        if (activeListId === overListId) {
+            return;
+        }
+
+        const oldIndex = lists.findIndex(list => list.id === activeListId);
+        const newIndex = lists.findIndex(list => list.id === overListId);
+
+        const reorderedLists = arrayMove(lists, oldIndex, newIndex);
+
+        setLocalLists(reorderedLists.map((list, index) => ({
+            ...list,
+            position: index
+        })));
+
+        try {
+            await listService.updateListsPositionsAfterDragAndDrop(reorderedLists);
+            setLocalLists(null);
+
+        } catch (error) {
+            console.error(error.message);
+            setLocalLists(null);
+        }
+
+    }
+
+    const sensors = useSensors(
+        useSensor(PointerSensor, {
+            activationConstraint: {
+                distance: 3,
+            }
+        })
+    );
+
     const renderContent = () => {
         if (isListsLoading) {
             return <LoadingSpinner className="board__spinner" width="60" />;
         }
 
-        return lists.map((list) => (
+        return currentLists.map((list) => (
             <ListBoard
-                boardId={boardId}
                 key={list.id}
-                listId={list.id}
-                title={list.title}
+                boardId={boardId}
+                list={list}
             />
         ));
     };
@@ -117,7 +174,24 @@ const Board = () => {
             </div>
 
             <Stack className="board__inner" alignItems="flex-start" columnGap="20" >
-                {renderContent()}
+                <DndContext
+                    onDragStart={onDragStart}
+                    onDragEnd={onDragEnd}
+                    sensors={sensors}
+                >
+                    <SortableContext items={listsId}>
+                        {renderContent()}                       
+                    </SortableContext>
+
+                    {createPortal(
+                        <DragOverlay>
+                            {draggingList && (
+                                <ListBoard list={draggingList} boardId={boardId} />
+                            )}
+                        </DragOverlay>
+                        , document.body
+                   ) }
+                </DndContext>
 
                 {!isListsLoading && (
                     <Popover

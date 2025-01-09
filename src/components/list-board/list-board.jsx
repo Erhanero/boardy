@@ -2,11 +2,9 @@
  * External dependencies.
  */
 import { useState, useEffect, useRef } from 'react';
-import {
-	draggable,
-	dropTargetForElements,
-} from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
 import classNames from 'classnames';
+import { useSortable } from '@dnd-kit/sortable';
+import {CSS} from '@dnd-kit/utilities';
 
 /**
  * Internal dependencies.
@@ -20,28 +18,31 @@ import Button from '@/components/button/button';
 import NavActions from '@/components/nav-actions/nav-actions';
 import ModalConfirm from '@/components/modal-confirm/modal-confirm';
 
-const ListBoard = ({ boardId, listId, title }) => {
+const ListBoard = (props) => {
+	const {list, boardId} = props
 	const { updateList } = useUpdateList();
 	const { deleteList } = useDeleteList();
 	const [isModalConfirmOpen, setIsModalConfirmOpen] = useState(false);
-	const ref = useRef(null);
-    const [isDraggedOver, setIsDraggedOver] = useState(false);
 
-	useEffect(() => {
-		const el = ref.current;
+	const {
+		attributes,
+		listeners,
+		setNodeRef,
+		transform,
+		transition,
+		isDragging
+	} = useSortable({
+		id: list.id,
+		data: {
+			type: 'List',
+			list
+		},
+	});
 
-		if (!el) {
-			return;
-		}
-
-		dropTargetForElements({
-			element: el,
-			onDragEnter: () => setIsDraggedOver(true),
-			onDragLeave: () => setIsDraggedOver(false),
-			onDrop: () => setIsDraggedOver(false),
-		});
-		
-	},[]);
+	const style = {
+		transform: CSS.Translate.toString(transform),
+		transition,
+	  };
 
 	/**
 	 * Update list title.
@@ -50,7 +51,7 @@ const ListBoard = ({ boardId, listId, title }) => {
 	 * @returns {Void}
 	 */
 	const updateListTitle = async (updatedTitle) => {
-		await updateList({ title: updatedTitle }, listId);
+		await updateList({ title: updatedTitle }, list.id);
 	}
 
 	/**
@@ -69,7 +70,7 @@ const ListBoard = ({ boardId, listId, title }) => {
 	 */
 	const handleDeleteConfirm = async () => {
         try {
-            await deleteList(listId);
+            await deleteList(list.id);
 			setIsModalConfirmOpen(false);
 			
         } catch (error) {
@@ -78,9 +79,15 @@ const ListBoard = ({ boardId, listId, title }) => {
     }
 
 	return (
-		<div className={classNames('list-board', { 'is-dragged-over': isDraggedOver })} ref={ref}>
+		<div
+			className={classNames('list-board', {'is-dragging': isDragging})}
+			ref={setNodeRef}
+			style={style}
+			{...attributes}
+			{...listeners}
+		>
 			<div className="list__head">
-				<EditableText initialText={title} onBlur={updateListTitle} className="list__title" />
+				<EditableText initialText={list.title} onBlur={updateListTitle} className="list__title" />
 
 				<Popover
 					position="right"
@@ -103,7 +110,7 @@ const ListBoard = ({ boardId, listId, title }) => {
 				</Popover>
 			</div>
 
-			<Cards listId={listId} boardId={boardId} />
+			<Cards listId={list.id} boardId={boardId} />
 
 			<ModalConfirm
 				isOpen={isModalConfirmOpen}

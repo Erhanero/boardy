@@ -2,10 +2,6 @@
  * External dependencies.
  */
 import { useState, useRef, useEffect } from 'react';
-import {
-	draggable,
-	dropTargetForElements,
-} from '@atlaskit/pragmatic-drag-and-drop/element/adapter';
 import classNames from 'classnames';
 
 /**
@@ -20,20 +16,6 @@ const Card = ({ id, title, description, label, onClick, listId }) => {
 	const { deleteCard } = useDeleteCard(id);
 	const [isDragging, setIsDragging] = useState(false);
 	const ref = useRef(null);
-
-	useEffect(() => {
-		const el = ref.current;
-
-		if (!el) {
-			return;
-		}
-
-		return draggable({
-			element: el,
-			onDragStart: () => setIsDragging(true),
-			onDrop: () => setIsDragging(false)
-		});
-	}, []);
 
 	/**
 	 * Handle delete click.
@@ -63,7 +45,7 @@ const Card = ({ id, title, description, label, onClick, listId }) => {
 
 	return (
 		<>
-			<div className={classNames('card', { 'is-dragging': isDragging })} onClick={() => onClick({ id, title, description, label })} ref={ref}>
+			<div className={classNames('card')} onClick={() => onClick({ id, title, description, label })}>
 				<div className="card__head">
 					<h3 className="card__title">{title}</h3>
 

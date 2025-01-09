@@ -13,7 +13,8 @@
 	max-height: 100%;
 	box-shadow: 5px 5px 7px -8px rgba(0, 0, 0, 0.6);
 	overflow-y: auto;
-	transition: background-color var(--t-duration);
+	transition: background-color var(--t-duration);	
+	cursor: pointer;		
 
 	&.is-dragged-over {
 		background-color: var(--c-blue-200);
@@ -29,5 +30,17 @@
 	
 	.list__title {
 		flex: 1;
+	}
+}
+
+//
+// List board is dragging
+// ==========================================================================
+
+.list-board.is-dragging {
+	background-color: var(--c-blue-200);
+
+	> * {
+		opacity: 0;
 	}
 }

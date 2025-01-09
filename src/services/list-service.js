@@ -11,7 +11,8 @@ import {
     addDoc,
     deleteDoc,
     getDocs,
-    getDoc
+    getDoc,
+    writeBatch
 } from 'firebase/firestore';
 import { db } from '@/services/firebase';
 
@@ -129,6 +130,19 @@ const listService = {
                 })
             )
         );
+    },
+
+    async updateListsPositionsAfterDragAndDrop(lists) {
+        const batch = writeBatch(db);
+        
+        lists.forEach((list, index) => {
+            const listRef = doc(db, 'lists', list.id);
+            batch.update(listRef, {
+                position: index
+            });
+        });
+
+        return batch.commit();
     }
 };
 
