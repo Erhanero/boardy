@@ -52,7 +52,7 @@
 		top: 50%;
 		left: calc(100% + 1rem);
 		transform: translateY(-50%);
-		box-shadow: 4px 4px 4px -4px rgba(0, 0, 0, 0.5);
+		box-shadow: 4px 4px 4px -2px rgba(0, 0, 0, 0.5);
 		transition: opacity var(--t-duration);
 		opacity: 0;
 		pointer-events: none;

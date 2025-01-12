@@ -8,7 +8,7 @@
 	min-width: 20rem;
 	font-size: 1.5rem;
 	border-radius: .4rem;
-	padding-block: .8rem;
+	padding-block: .5rem;
 
 	h6 {
 		font-size: 1.5rem;
@@ -17,12 +17,13 @@
 		padding-inline: .6rem;
 		margin-bottom: .6rem;
 		border-bottom: 1px solid var(--c-gray-500);
+		font-weight: 700;
 	}
 
 	button {
 		width: 100%;
 		text-align: left;
-		border-radius: .2rem;
+		border-radius: .4rem;
 		padding: .4rem 1rem;
 		transition: background-color var(--t-duration),
 		color var(--t-duration);

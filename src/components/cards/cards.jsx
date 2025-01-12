@@ -1,25 +1,24 @@
 /**
  * External dependencies.
  */
-import { useState } from 'react';
+import { useState, useMemo} from 'react';
+import { SortableContext } from '@dnd-kit/sortable';
 
 /**
-* Internal dependencies.
+ * Internal dependencies.
 */
 import Card from '@/components/card/card';
 import Stack from '@/components/stack/stack';
 import Button from '@/components/button/button';
 import Modal from '@/components/modal/modal';
 import FormCard from '@/components/form-card/form-card';
-import useCards from '@/hooks/cards/use-cards';
-import LoadingSpinner from '@/components/loading-spinner/loading-spinner';
 
-const Cards = ({ listId, boardId }) => {
-    const { cards, isLoading } = useCards(listId);
+const Cards = ({ cards = [], listId, boardId }) => {
     const [showModal, setShowModal] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false);
     const [selectedCard, setSelectedCard] = useState(null);
-
+    const cardsIds = useMemo(() => cards.map(card => card.id), [cards]); 
+    
     /**
      * Card click handler.
      * 
@@ -52,27 +51,24 @@ const Cards = ({ listId, boardId }) => {
         setShowModal(true);
     };
 
-    if (isLoading) {
-        return <LoadingSpinner width="60" />;
-    }
-
     return (
         <div className="cards">
-            <div className="cards__inner">
-                <Stack direction="column" alignItems="normal" rowGap="12">
-                    {cards.map(card => {
-                        return <Card
-                            key={card.id}
-                            id={card.id}
-                            title={card.title}
-                            description={card.description}
-                            label={card.label}
-                            onClick={cardClickHandler}
-                            listId={listId}
-                        />;
-                    })}
-                </Stack>
-            </div>
+            <SortableContext items={cardsIds}>
+                {cards.length > 0 && (
+                    <div className="cards__inner">
+                        <Stack direction="column" alignItems="normal" rowGap="12">
+                            {cards.map(card => {
+                                return <Card
+                                    key={card.id}
+                                    card={card}
+                                    onClick={cardClickHandler}
+                                    listId={listId}
+                                />;
+                            })}
+                        </Stack>
+                    </div>
+                )}
+            </SortableContext>
 
             <Button className="cards__button" onClick={handleOpenModal}>+ Add a card</Button>
 

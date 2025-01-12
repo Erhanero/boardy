@@ -15,14 +15,34 @@ import {
 } from 'firebase/firestore';
 import { db } from '@/services/firebase';
 
-const getCardsQuery = (listRef) =>
-    query(collection(db, 'cards'), where('listId', '==', listRef));
+const getCardsQuery = (boardRef) =>
+    query(collection(db, 'cards'), where('boardId', '==', boardRef));
 
 const cardService = {
     /**
-     * Get cards by list id.
+     * Get cards by board id.
      *
      * @param {String} boardId
+     * @param {Function} onSuccess
+     * @returns {Function}
+     */
+    getCardsByBoardId(boardId, onSuccess) {
+        const boardRef = doc(db, 'boards', boardId);
+        const cardsQuery = getCardsQuery(boardRef);
+        
+        return onSnapshot(cardsQuery, (snapshot) => {
+            const cardsData = snapshot.docs.map((doc) => ({
+                id: doc.id,
+                ...doc.data(),
+            }));
+
+            onSuccess(cardsData);
+        });
+    },
+    /**
+     * Get cards by list id.
+     *
+     * @param {String} listId
      * @param {Function} onSuccess
      * @returns {Function}
      */

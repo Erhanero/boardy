@@ -13,10 +13,6 @@
 	transition-duration: var(--t-duration);
 	cursor: pointer;
 
-	&.is-dragging {
-		opacity: .7;
-	}
-
 	&:hover {
 		background-color: var(--c-blue-700);
 	}
@@ -45,5 +41,17 @@
 		text-align: center;
 		padding: .4rem 1rem;
 		font-size: 1.1rem;
+	}
+}
+
+//
+// Card is dragging
+// ==========================================================================
+
+.card.is-dragging {
+	background-color: var(--c-blue-200);
+
+	> * {
+		opacity: 0;
 	}
 }

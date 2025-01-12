@@ -1,11 +1,19 @@
 /**
  * External dependencies.
  */
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import {DndContext, DragOverlay, useSensors, useSensor, PointerSensor} from '@dnd-kit/core';
+import {
+    DndContext,
+    DragOverlay,
+    useSensors,
+    useSensor,
+    PointerSensor,
+} from '@dnd-kit/core';
 import { SortableContext, arrayMove } from '@dnd-kit/sortable';
-import {createPortal} from 'react-dom';
+import { createPortal } from 'react-dom';
+import {doc} from 'firebase/firestore';
+import { db } from '@/services/firebase';
 
 /**
  * Internal dependencies.
@@ -24,19 +32,30 @@ import NavActions from '@/components/nav-actions/nav-actions';
 import ModalConfirm from '@/components/modal-confirm/modal-confirm';
 import useDeleteBoard from '@/hooks/boards/use-delete-board';
 import listService from '@/services/list-service';
+import Card from '@/components/card/card';
+import useCards from '@/hooks/cards/use-cards';
 
 const Board = () => {
     const { boardId } = useParams();
     const { board, isLoading: isBoardLoading } = useBoard(boardId);
     const { lists, isLoading: isListsLoading } = useLists(boardId);
-    const [ localLists, setLocalLists ] = useState(null);
     const { deleteBoard } = useDeleteBoard();
     const { updateBoard } = useUpdateBoard();
+
+    const [reorderedLists, setReorderedLists] = useState(null);
     const [isModalConfirmOpen, setIsModalConfirmOpen] = useState(false);
-    const listsId = useMemo(() => lists.map(list => list.id),
-        [lists]);
     const [draggingList, setDraggingList] = useState(null);
-    const currentLists = localLists || lists;
+    const displayedLists = reorderedLists || lists;
+    const listsIds = useMemo(() => lists.map(list => list.id), [lists]);
+
+    const [draggingCard, setDraggingCard] = useState(null);
+    const {
+        cards,
+        reorderCardsInList,
+        moveCardBetweenLists,
+        updateCardListId
+    } = useCards(boardId);
+    const originalListIdRef = useRef(null);
 
     /**
      * Update board title.
@@ -65,52 +84,183 @@ const Board = () => {
     const handleDeleteConfirm = async () => {
         try {
             await deleteBoard(boardId);
-			setIsModalConfirmOpen(false);
-			
+            setIsModalConfirmOpen(false);
+
         } catch (error) {
-			console.error(error.message);            
+            console.error(error.message);
         }
     }
 
-    const onDragStart = (e) => {
-        if (e.active.data.current.type !== "List") {
-            return;
+    /**
+    * On drag start.
+    * 
+    * @param {Object} e 
+    * @returns {Void}
+    */
+    const handleDragStart = (e) => {
+        const { active } = e;
+        originalListIdRef.current = active.data.current.listId;
+
+        if (active.data.current.type === 'List') {
+            return setDraggingList(active.data.current.list);
         }
-        
-       setDraggingList(e.active.data.current.list);
+
+        if (active.data.current.type === 'Card') {
+            return setDraggingCard(active.data.current.card);
+        }
     }
 
-    const onDragEnd = async(e) => {
-        if (!e.over && e.over.data.current.type !== "List") {
+    /**
+     * Rearrange lists.
+     * 
+     * @param {Object} activeList 
+     * @param {Object} overList 
+     * @returns {Void}
+     */
+    const updateListOrder = async (activeList, overList) => {
+        if (activeList.id === overList.id) {
             return;
         }
 
-        const activeListId = e.active.id;
-        const overListId = e.over.id;
+        const oldIndex = lists.findIndex(list => list.id === activeList.id);
+        const newIndex = lists.findIndex(list => list.id === overList.id);
+        const updatedLists = arrayMove(lists, oldIndex, newIndex);
 
-        if (activeListId === overListId) {
-            return;
-        }
-
-        const oldIndex = lists.findIndex(list => list.id === activeListId);
-        const newIndex = lists.findIndex(list => list.id === overListId);
-
-        const reorderedLists = arrayMove(lists, oldIndex, newIndex);
-
-        setLocalLists(reorderedLists.map((list, index) => ({
+        setReorderedLists(updatedLists.map((list, index) => ({
             ...list,
             position: index
         })));
 
         try {
-            await listService.updateListsPositionsAfterDragAndDrop(reorderedLists);
-            setLocalLists(null);
+            await listService.updateListsPositions(updatedLists);
 
         } catch (error) {
             console.error(error.message);
-            setLocalLists(null);
+
+        } finally {
+            setReorderedLists(null);
+        }
+    }
+
+    /** 
+     * On drag end.
+     * 
+     * @param {Object} e
+     * @returns {Void}
+     */
+    const handleDragEnd = async (e) => {
+        const { active, over } = e;
+
+        setDraggingList(null);
+        setDraggingCard(null);
+
+        if (over && over.data?.current.type === 'List') {
+            updateListOrder(active, over);
         }
 
+        if (over && over.data?.current.type === 'Card') {
+            updateCardOrder(active, over);
+        }
+    }
+
+    /**
+     * Update card order.
+     * 
+     * @param {Object} activeCard 
+     * @param {Object} overCard
+     * @returns {Void}
+     */
+    const updateCardOrder = async (activeCard, overCard) => {
+        const activeList = findListById(activeCard.data.current.listId);
+        const overList = findListById(overCard.data.current.listId);
+
+        if (!activeList || !overList) {
+            return;
+        }
+
+        const activeCards = findCardsByListId(activeList.id);
+        const overCards = activeList.id === overList.id
+            ? activeCards
+            : findCardsByListId(overList.id);
+
+        const activeCardIndex = activeCards.findIndex(card => card.id === activeCard.id);
+        const overCardIndex = overCards.findIndex(card => card.id === overCard.id);
+        const isSameList = originalListIdRef.current === overList.id;
+
+        try {
+            if (isSameList) {
+               reorderCardsInList(activeCards, {
+                    activeCardIndex,
+                    overCardIndex
+                });
+
+            } else {
+                const [movedCard] = activeCards.splice(activeCardIndex, 1);
+                overCards.splice(overCardIndex, 0, movedCard);
+
+                moveCardBetweenLists(activeCards, overCards, {
+                    activeCard,
+                    overCardIndex,
+                    overList
+                });
+            }
+        } catch (error) {
+            console.error(error.message);
+        }
+    }
+
+    /**
+     * Find list by id.
+     * 
+     * @param {String} id 
+     * @returns {Object}
+     */
+    const findListById = (id) => {
+        return lists.find(list => list.id === id);
+    };
+
+    /**
+     * Handle Drag over.
+     * 
+     * @param {Object} e 
+     * @returns {Void}
+     */
+    const handleDragOver = (e) => {
+        const { active, over } = e;
+
+        if (!over) {
+            return;
+        }
+
+        const isActiveACard = active.data.current?.type === 'Card';
+        const isOverACard = over.data.current?.type === 'Card';
+        const isOverAList = over.data.current?.type === 'List';
+
+        if (isActiveACard) {
+            let newListId;
+
+            if (isOverACard) {
+                newListId = over.data.current.listId;
+            } else if (isOverAList) {
+                newListId = over.id;
+            }
+
+            if (newListId && active.data.current.listId !== newListId) {
+                updateCardListId(active.id, newListId);
+                active.data.current.listId = newListId;
+            }
+        }
+    }
+
+    /**
+     * Get cards by list id.
+     * 
+     * @param {param} listId 
+     * @returns {Array}
+     */
+    const findCardsByListId = (listId) => {
+        const listRef = doc(db, 'lists', listId);
+        return cards.filter(card => card.listId.path === listRef.path)
     }
 
     const sensors = useSensors(
@@ -121,18 +271,27 @@ const Board = () => {
         })
     );
 
-    const renderContent = () => {
+    /**
+     * Render board content.
+     * 
+     * @returns {JSXElement | JSXELement[]}
+     */
+    const renderBoardContent = () => {
         if (isListsLoading) {
             return <LoadingSpinner className="board__spinner" width="60" />;
         }
 
-        return currentLists.map((list) => (
-            <ListBoard
-                key={list.id}
-                boardId={boardId}
-                list={list}
-            />
-        ));
+        return displayedLists.map((list) => {
+            return (
+                <ListBoard
+                    key={list.id}
+                    boardId={boardId}
+                    list={list}
+                    cards={findCardsByListId(list.id)}
+                />
+            )
+        })
+
     };
 
     if (!board && !isBoardLoading) {
@@ -175,22 +334,29 @@ const Board = () => {
 
             <Stack className="board__inner" alignItems="flex-start" columnGap="20" >
                 <DndContext
-                    onDragStart={onDragStart}
-                    onDragEnd={onDragEnd}
+                    onDragStart={handleDragStart}
+                    onDragEnd={handleDragEnd}
+                    onDragOver={handleDragOver}
                     sensors={sensors}
                 >
-                    <SortableContext items={listsId}>
-                        {renderContent()}                       
+                    <SortableContext items={listsIds}>
+                        {renderBoardContent()}
                     </SortableContext>
 
                     {createPortal(
                         <DragOverlay>
                             {draggingList && (
-                                <ListBoard list={draggingList} boardId={boardId} />
+                                <ListBoard
+                                    list={draggingList}
+                                    boardId={boardId}
+                                    cards={findCardsByListId(draggingList.id)}
+                                />
                             )}
+
+                            {draggingCard && <Card card={draggingCard} />}
                         </DragOverlay>
                         , document.body
-                   ) }
+                    )}
                 </DndContext>
 
                 {!isListsLoading && (
@@ -216,7 +382,7 @@ const Board = () => {
                 title="Delete Board"
                 message={
                     <>
-                        Are you sure you want to delete this board? <br/> All cards and lists in this board will be deleted too.
+                        Are you sure you want to delete this board? <br /> All cards and lists in this board will be deleted too.
                     </>
                 }
             />

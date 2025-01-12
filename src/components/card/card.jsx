@@ -1,8 +1,10 @@
 /**
  * External dependencies.
  */
-import { useState, useRef, useEffect } from 'react';
+import { useState } from 'react';
 import classNames from 'classnames';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 
 /**
  * Internal dependencies.
@@ -11,11 +13,31 @@ import ModalConfirm from '@/components/modal-confirm/modal-confirm';
 import Button from '@/components/button/button';
 import useDeleteCard from '@/hooks/cards/use-delete-card';
 
-const Card = ({ id, title, description, label, onClick, listId }) => {
+const Card = ({ card, onClick, listId }) => {
+	const { id, title, description, label } = card;
 	const [isModalConfirmOpen, setIsModalConfirmOpen] = useState(false);
 	const { deleteCard } = useDeleteCard(id);
-	const [isDragging, setIsDragging] = useState(false);
-	const ref = useRef(null);
+
+	const {
+		attributes,
+		listeners,
+		setNodeRef,
+		transform,
+		transition,
+		isDragging
+	} = useSortable({
+		id,
+		data: {
+			type: 'Card',
+			card,
+			listId
+		},
+	});
+
+	const style = {
+		transform: CSS.Translate.toString(transform),
+		transition,
+	  };
 
 	/**
 	 * Handle delete click.
@@ -45,7 +67,14 @@ const Card = ({ id, title, description, label, onClick, listId }) => {
 
 	return (
 		<>
-			<div className={classNames('card')} onClick={() => onClick({ id, title, description, label })}>
+			<div
+				className={classNames('card', {'is-dragging': isDragging})}
+				onClick={() => onClick?.({ card })}
+				ref={setNodeRef}
+				style={style}
+				{...attributes}
+				{...listeners}
+			>
 				<div className="card__head">
 					<h3 className="card__title">{title}</h3>
 
@@ -57,7 +86,7 @@ const Card = ({ id, title, description, label, onClick, listId }) => {
 					</Button>
 				</div>
 
-				<p className="card__description">{description} </p>
+				{description && <p className="card__description">{description} </p>}
 
 				{label && <span className="card__label">{label}</span>}
 			</div>
