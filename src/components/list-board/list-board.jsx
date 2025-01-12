@@ -1,7 +1,7 @@
 /**
  * External dependencies.
  */
-import { useState, useEffect, useRef } from 'react';
+import { useState} from 'react';
 import classNames from 'classnames';
 import { useSortable } from '@dnd-kit/sortable';
 import {CSS} from '@dnd-kit/utilities';
@@ -18,8 +18,7 @@ import Button from '@/components/button/button';
 import NavActions from '@/components/nav-actions/nav-actions';
 import ModalConfirm from '@/components/modal-confirm/modal-confirm';
 
-const ListBoard = (props) => {
-	const {list, boardId} = props
+const ListBoard = ({list, boardId, cards}) => {
 	const { updateList } = useUpdateList();
 	const { deleteList } = useDeleteList();
 	const [isModalConfirmOpen, setIsModalConfirmOpen] = useState(false);
@@ -76,7 +75,7 @@ const ListBoard = (props) => {
         } catch (error) {
 			console.error(error.message);            
         }
-    }
+	}
 
 	return (
 		<div
@@ -110,7 +109,7 @@ const ListBoard = (props) => {
 				</Popover>
 			</div>
 
-			<Cards listId={list.id} boardId={boardId} />
+			<Cards cards={cards} listId={list.id} boardId={boardId} />
 
 			<ModalConfirm
 				isOpen={isModalConfirmOpen}

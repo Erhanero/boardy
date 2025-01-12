@@ -103,19 +103,19 @@ const listService = {
             )
         );     
 
-        await this.updateListsPositions(deletedListBoardId, deletedListPosition)
+        await this.updatePositionByBoardId(deletedListBoardId, deletedListPosition)
         
         return deleteDoc(listRef);
     },
       
       /**
-       * Update lists positions.
+       * Update positions after delete.
        * 
        * @param {String} boardId 
        * @param {Number} deletedPosition 
        * @returns {Promise}
        */
-    async updateListsPositions(boardId, deletedPosition) {
+    async updatePositionByBoardId(boardId, deletedPosition) {
         const listsQuery = query(
             collection(db, 'lists'),
             where('boardId', '==', boardId),
@@ -132,7 +132,13 @@ const listService = {
         );
     },
 
-    async updateListsPositionsAfterDragAndDrop(lists) {
+    /**
+     * Update lists positions.
+     * 
+     * @param {Array} lists 
+     * @returns {Promise<void>}
+     */
+    async updateListsPositions(lists) {
         const batch = writeBatch(db);
         
         lists.forEach((list, index) => {
