@@ -13,6 +13,7 @@
     z-index: 100;
     opacity: 0;
     transition: opacity var(--t-duration);
+    cursor: auto;
 
     .modal__overlay {
         position: absolute;

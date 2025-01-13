@@ -12,8 +12,9 @@ import {
 } from '@dnd-kit/core';
 import { SortableContext, arrayMove } from '@dnd-kit/sortable';
 import { createPortal } from 'react-dom';
-import {doc} from 'firebase/firestore';
+import { doc } from 'firebase/firestore';
 import { db } from '@/services/firebase';
+import Skeleton from 'react-loading-skeleton';
 
 /**
  * Internal dependencies.
@@ -22,7 +23,6 @@ import ListBoard from '@/components/list-board/list-board';
 import Stack from '@/components/stack/stack';
 import EditableText from '@/components/editable-text/editable-text';
 import useLists from '@/hooks/lists/use-lists';
-import LoadingSpinner from '@/components/loading-spinner/loading-spinner';
 import useBoard from '@/hooks/boards/use-board';
 import Button from '@/components/button/button';
 import FormAddList from '@/components/form-add-list/form-add-list';
@@ -34,6 +34,7 @@ import useDeleteBoard from '@/hooks/boards/use-delete-board';
 import listService from '@/services/list-service';
 import Card from '@/components/card/card';
 import useCards from '@/hooks/cards/use-cards';
+import ListBoardSkeleton from '@/components/list-board/list-board-skeleton';
 
 const Board = () => {
     const { boardId } = useParams();
@@ -189,7 +190,7 @@ const Board = () => {
 
         try {
             if (isSameList) {
-               reorderCardsInList(activeCards, {
+                reorderCardsInList(activeCards, {
                     activeCardIndex,
                     overCardIndex
                 });
@@ -278,7 +279,7 @@ const Board = () => {
      */
     const renderBoardContent = () => {
         if (isListsLoading) {
-            return <LoadingSpinner className="board__spinner" width="60" />;
+            return <ListBoardSkeleton />
         }
 
         return displayedLists.map((list) => {
@@ -301,6 +302,15 @@ const Board = () => {
     return (
         <div className="board">
             <div className="board__head">
+                {isBoardLoading &&
+                    <Skeleton
+                        width={200}
+                        height={32}
+                        style={{
+                            borderRadius: '4px'
+                        }}
+                    />}
+
                 {!isBoardLoading &&
                     <>
                         <EditableText
@@ -337,7 +347,7 @@ const Board = () => {
                     onDragStart={handleDragStart}
                     onDragEnd={handleDragEnd}
                     onDragOver={handleDragOver}
-                    sensors={sensors}                    
+                    sensors={sensors}
                 >
                     <SortableContext items={listsIds}>
                         {renderBoardContent()}
