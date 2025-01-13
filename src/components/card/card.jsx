@@ -69,7 +69,7 @@ const Card = ({ card, onClick, listId }) => {
 		<>
 			<div
 				className={classNames('card', {'is-dragging': isDragging})}
-				onClick={() => onClick?.({ card })}
+				onClick={() => onClick?.(card)}
 				ref={setNodeRef}
 				style={style}
 				{...attributes}
