@@ -122,6 +122,11 @@ blockquote:last-child {
     margin-bottom: 0;
 }
 
+:focus-visible {
+    outline: 2px solid var(--c-blue-500);
+    outline-offset: 2px;
+}
+
 .bg-blue {
     background-color: var(--c-blue-500);
 }
