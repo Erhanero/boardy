@@ -2,7 +2,7 @@
  * External dependencies.
  */
 import { useState, useMemo} from 'react';
-import { SortableContext } from '@dnd-kit/sortable';
+import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 
 /**
  * Internal dependencies.
@@ -53,7 +53,7 @@ const Cards = ({ cards = [], listId, boardId }) => {
 
     return (
         <div className="cards">
-            <SortableContext items={cardsIds}>
+            <SortableContext items={cardsIds} strategy={verticalListSortingStrategy}>
                 {cards.length > 0 && (
                     <div className="cards__inner">
                         <Stack direction="column" alignItems="normal" rowGap="12">

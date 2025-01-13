@@ -337,7 +337,7 @@ const Board = () => {
                     onDragStart={handleDragStart}
                     onDragEnd={handleDragEnd}
                     onDragOver={handleDragOver}
-                    sensors={sensors}
+                    sensors={sensors}                    
                 >
                     <SortableContext items={listsIds}>
                         {renderBoardContent()}
