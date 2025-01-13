@@ -2,7 +2,8 @@
  * External dependencies.
  */
 import { useState, useEffect, useRef } from 'react';
-import {createPortal} from 'react-dom';
+import { createPortal } from 'react-dom';
+import { CSSTransition } from 'react-transition-group';
 
 const Popover = (props) => {
 	const {
@@ -12,7 +13,7 @@ const Popover = (props) => {
 		onClose,
 		triggerStyle = {},
 	} = props;
-	
+
 	const [isOpen, setIsOpen] = useState(false);
 	const popoverRef = useRef(null);
 	const triggerRef = useRef(null);
@@ -21,7 +22,7 @@ const Popover = (props) => {
 	const closePopover = () => {
 		setIsOpen(false);
 		onClose && onClose();
-	};	
+	};
 
 	/**
 	 * Get popover position.
@@ -74,6 +75,12 @@ const Popover = (props) => {
 	}
 
 	useEffect(() => {
+		/**
+		 * Handle click outside.
+		 * 
+		 * @param {Event} event 
+		 * @returns {Void}
+		 */
 		const handleClickOutside = (event) => {
 			if (
 				popoverRef.current &&
@@ -109,7 +116,7 @@ const Popover = (props) => {
 	return (
 		<>
 			<div
-    	        className={`popover-trigger ${isOpen ? 'is-active' : ''}`}
+				className={`popover-trigger ${isOpen ? 'is-active' : ''}`}
 				ref={triggerRef}
 				onClick={togglePopover}
 				style={triggerStyle}
@@ -118,13 +125,21 @@ const Popover = (props) => {
 			</div>
 
 			{createPortal(
-				isOpen && (
-					<div ref={popoverRef} className="popover">
-						{typeof children === 'function' ? children(closePopover) : children}
-					</div>
-				),
-				document.body
-			)}
+            <CSSTransition
+                in={isOpen}
+                timeout={500}
+                nodeRef={popoverRef}
+                classNames="popover"
+                unmountOnExit
+            >
+                {(state) => (
+                    <div ref={popoverRef} className="popover">
+                        {typeof children === 'function' ? children(closePopover) : children}
+                    </div>
+                )}
+            </CSSTransition>,
+            document.body
+        )}
 		</>
 	);
 };
