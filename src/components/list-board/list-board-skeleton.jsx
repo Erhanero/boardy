@@ -16,7 +16,7 @@ const ListBoardSkeleton = ({ count = 4 }) => {
                     key={index}
 					className="list-board"
 					style={{
-						backgroundColor: 'white'
+						backgroundColor: '#cdcdcd'
 					}}
                 >
                     <div className="list__head">
@@ -24,7 +24,13 @@ const ListBoardSkeleton = ({ count = 4 }) => {
                         <Skeleton circle width={32} height={32} />
 					</div>
 
-					<div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '16px' }}>
+                    <div style=
+                        {{
+                            display: 'flex',
+                        flexDirection: 'column',
+                        gap: '8px', 
+                        marginTop: '16px'
+                        }}>
                         {Array(3).fill(null).map((item, cardIndex) => (
 							<CardSkeleton key={cardIndex} />
                         ))}

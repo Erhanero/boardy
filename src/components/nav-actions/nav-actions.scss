@@ -8,7 +8,7 @@
 	min-width: 20rem;
 	font-size: 1.5rem;
 	border-radius: .6rem;
-	padding-block: .5rem;
+	padding-block: .5rem;	
 
 	h6 {
 		font-size: 1.5rem;
@@ -27,6 +27,7 @@
 		padding: .4rem 1rem;
 		transition: background-color var(--t-duration),
 		color var(--t-duration);
+		padding-block: .6rem;
 
 		&:hover {
 			background-color: var(--c-blue-500);
@@ -37,4 +38,12 @@
 	li + li {
 		margin-top: 1rem;
 	}
+}
+
+// ==========================================================================
+// Theme dark
+// ==========================================================================
+
+[data-theme="dark"] .nav-actions {
+	color: var(--c-gray-900);
 }

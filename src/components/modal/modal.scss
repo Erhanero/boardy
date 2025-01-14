@@ -123,3 +123,13 @@
 .modal-exit-done {
 	opacity: 0;
 }
+
+//
+// Dark theme
+// ==========================================================================
+
+[data-theme="dark"] .modal  {
+    .modal__inner {
+        background-color: var(--c-main-light);
+    }
+}

@@ -5,8 +5,12 @@
 .sidebar {
 	width: 10rem;
 	flex-shrink: 0;
-	background-color: var(--c-blue-100);
+	background-color: var(--c-main-light);
 	padding-block: 4rem;
 	padding-inline: 2rem;
 	height: 100vh;
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	gap: 2rem;
 }

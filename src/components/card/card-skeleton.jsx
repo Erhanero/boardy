@@ -7,7 +7,7 @@ const CardSkeleton = () => {
 	return (
 		<div
 			className="card"
-			style={{ backgroundColor: 'white' }}
+			style={{ backgroundColor: '#c6c6c6' }}
 		>
 			<div className="card__head">
 				<Skeleton width={120} />

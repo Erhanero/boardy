@@ -63,6 +63,7 @@ const Nav = () => {
 					<span className="nav__text">Login</span>
 				</NavLink>
 			</li>
+
 			<li>
 				<NavLink to="/register" className="nav__link">
 					<span className="nav__icon">

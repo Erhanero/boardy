@@ -43,7 +43,7 @@ const Popover = (props) => {
 				left: triggerRect.left + triggerRect.width / 2 - popoverRect.width / 2 + window.scrollX,
 			},
 			bottom: {
-				top: triggerRect.bottom + window.scrollY,
+				top: triggerRect.bottom + window.scrollY + 10,
 				left: triggerRect.left + triggerRect.width / 2 - popoverRect.width / 2 + window.scrollX,
 			},
 			left: {
@@ -125,21 +125,21 @@ const Popover = (props) => {
 			</div>
 
 			{createPortal(
-            <CSSTransition
-                in={isOpen}
-                timeout={500}
-                nodeRef={popoverRef}
-                classNames="popover"
-                unmountOnExit
-            >
-                {(state) => (
-                    <div ref={popoverRef} className="popover">
-                        {typeof children === 'function' ? children(closePopover) : children}
-                    </div>
-                )}
-            </CSSTransition>,
-            document.body
-        )}
+				<CSSTransition
+					in={isOpen}
+					timeout={500}
+					nodeRef={popoverRef}
+					classNames="popover"
+					unmountOnExit
+				>
+					{(state) => (
+						<div ref={popoverRef} className="popover">
+							{typeof children === 'function' ? children(closePopover) : children}
+						</div>
+					)}
+				</CSSTransition>,
+          	  	document.body
+       	 	)}
 		</>
 	);
 };

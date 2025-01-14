@@ -58,3 +58,19 @@
 		pointer-events: none;
 	}
 }
+
+// ==========================================================================
+// Dark theme
+// ==========================================================================
+
+
+[data-theme="dark"] .nav {
+	.nav__link:hover svg,
+	.nav__link.active svg {
+		fill: var(--c-black);
+	}
+
+	svg {
+		fill: var(--c-white);
+	}
+}

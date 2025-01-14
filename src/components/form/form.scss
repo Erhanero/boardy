@@ -11,6 +11,7 @@
         margin-bottom: 0.4rem;
         display: inline-block;
         font-size: 1.4rem;
+        color: var(--c-gray-900);
     }
 
     .form__group + .form__group {
@@ -48,5 +49,15 @@
 
     .form__actions {
         justify-content: center;
+    }
+}
+
+//
+// Dark theme
+// ==========================================================================
+
+[data-theme="dark"] .form {
+    .form__label {
+        color: var(--c-white);
     }
 }

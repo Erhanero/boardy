@@ -55,3 +55,15 @@
 		opacity: 0;
 	}
 }
+
+//
+// Dark theme
+// ==========================================================================
+
+[data-theme="dark"] .card {
+	background-color: var(--c-blue-800);
+
+	&:hover {
+		background-color: var(--c-blue-700);
+	}
+}

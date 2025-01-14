@@ -12,6 +12,7 @@
 	font-size: 1.6rem;
 	transition: border-color var(--t-duration),
 	background-color var(--t-duration);
+	color: var(--c-gray-900);
 
 	&:focus {
 		border-color: var(--c-blue-500);
@@ -26,4 +27,12 @@
 .input-field--textarea {
 	height: 11rem;
 	resize: none;
+}
+
+//
+// Dark theme
+// ==========================================================================
+
+[data-theme="dark"] .input-field {
+	background-color: var(--c-blue-100);
 }

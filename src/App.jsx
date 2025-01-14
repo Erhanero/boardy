@@ -17,7 +17,7 @@ function App() {
         <ThemeProvider>
             <SkeletonTheme
                 baseColor="#efebeb"
-                highlightColor="#e3e3e3"
+                highlightColor="#fff"
             >
                 <AuthProvider>
                     <Router />

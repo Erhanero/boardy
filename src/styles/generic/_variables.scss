@@ -20,6 +20,7 @@
     --c-blue-200: #bcd6ff;
     --c-blue-500: #1e8fff;
     --c-blue-700: #056dd4;
+    --c-blue-800: #1e3b67;
 
     // Red
     --c-red-500: #f94e4e;
@@ -29,7 +30,22 @@
     --c-gray-100: #f6f6f6;
     --c-gray-300: #3232322e;
     --c-gray-500: #aaaa;
+    --c-gray-600: #1c253a;
     --c-gray-900: #323232;
+    --c-gray-910: #0d1322;
+
+    // Theme colors
+    --c-main: var(--c-blue);
+    --c-main-light: var(--c-blue-100);
+    --c-main-bg: var(--c-gray-100);
+    --c-text: var(--c-gray-900);
+
+    &[data-theme="dark"] {
+        --c-main: var(--c-gray-900);
+        --c-main-bg: var(--c-gray-910);
+        --c-main-light: var(--c-gray-600);
+        --c-text: var(--c-white);
+    }
 }
 
 $breakpoints: (
