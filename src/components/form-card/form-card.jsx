@@ -75,13 +75,19 @@ const FormCard = ({ cardData, listId, boardId, onSuccess, mode = 'create' }) => 
 			isLoading={isLoading}
 			disabled={isLoading}		
 		>
-			{fields.map(({ id, name, label, validation, type }) => (
+			{fields.map(({ id, name, label, validation, type }, index) => (
 				<div className="form__group" key={id}>
 					<label htmlFor={id} className="form__label">
 						{label}
 					</label>
 
-					<InputField {...register(name, validation)} type={type} name={name} id={id} />
+					<InputField
+						{...register(name, validation)}
+						type={type}
+						name={name}
+						id={id}
+						autoFocus={index === 0}
+					/>
 
 					{errors[name] && (
 						<span className="form__error">{errors[name]?.message}</span>

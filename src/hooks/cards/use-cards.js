@@ -2,7 +2,6 @@
  * External dependencies.
  */
 import { useEffect, useState, useCallback } from 'react';
-import { arrayMove } from '@dnd-kit/sortable';
 import { doc,writeBatch} from 'firebase/firestore';
 import { db } from '@/services/firebase';
 
@@ -17,6 +16,23 @@ const useCards = (boardId) => {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     const { user } = useAuth();
+
+    useEffect(() => {
+        if (!user) {
+            setIsLoading(false);
+            return;
+		}
+
+        try {
+            const unsubscribe = cardService.getCardsByBoardId(boardId, onSuccess);
+            
+            return () => unsubscribe?.();
+        }
+        catch(error) {
+            onError(error);
+        }
+
+    }, [user]);
 
     /**
      * On success.
@@ -41,25 +57,15 @@ const useCards = (boardId) => {
         console.error(error.message);
         setError(error.message);
         setIsLoading(false);
-    };
+    };   
 
-    useEffect(() => {
-        if (!user) {
-            setIsLoading(false);
-            return;
-		}
-
-        try {
-            const unsubscribe = cardService.getCardsByBoardId(boardId, onSuccess);
-            
-            return () => unsubscribe?.();
-        }
-        catch(error) {
-            onError(error);
-        }
-
-    }, [user]);
-
+    /**
+     * Updat card list id.
+     * 
+     * @param {String} cardId
+     * @param {String} newListId
+     * @returns {Void}
+     */
     const updateCardListId = useCallback((cardId, newListId) => {
         const newListRef = doc(db, 'lists', newListId);
 
@@ -71,8 +77,13 @@ const useCards = (boardId) => {
         }));
     }, []);
 
-    const reorderCardsInList = useCallback(async (targetCards, {activeCardIndex, overCardIndex}) => {        
-        const updatedCards = arrayMove(targetCards, activeCardIndex, overCardIndex);
+    /**
+     * Reorder cards in list.
+     * 
+     * @param {Array} updatedCards
+     * @returns {Void}
+     */
+    const reorderCardsInList = useCallback(async (updatedCards) => {        
         const prevCardsState = [...cards];
                 
         setCards(prevCards => {
@@ -107,7 +118,17 @@ const useCards = (boardId) => {
         }
     }, []);
 
-    const moveCardBetweenLists = useCallback(async (activeCards, overCards, params) => {
+    /**
+     * Move card between lists
+     * 
+     * @param {Array} overCards 
+     * @param {Object} params
+     * @param {Object} params.activeCard
+     * @param {Number} params.overCardIndex
+     * @param {Object} params.overList
+     * @returns {Void}     
+     */
+    const moveCardBetweenLists = useCallback(async (overCards, params) => {
         const { activeCard, overCardIndex, overList } = params;    
         const prevCardsState = [...cards];
         

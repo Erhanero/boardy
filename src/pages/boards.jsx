@@ -7,7 +7,7 @@ import Stack from '@/components/stack/stack';
 import useBoards from '@/hooks/boards/use-boards';
 import Popover from '@/components/popover/popover';
 import Button from '@/components/button/button';
-import FormAddBoard from '@/components/form-add-board/form-add-board';
+import FormCreateBoard from '@/components/form-create-board/form-create-board';
 import BoxBoardSkeleton from '@/components/box-board/box-board-skeleton';
 
 const Boards = () => {
@@ -48,7 +48,7 @@ const Boards = () => {
 							</Button>
 						}
 					>
-						<FormAddBoard />
+						<FormCreateBoard />
 					</Popover>
 				</Stack.Item>
 

@@ -1,15 +1,15 @@
 // ==========================================================================
-// Sidebar
+// Nav Utilities
 // ==========================================================================
 
-.sidebar {
-	width: 10rem;
-	flex-shrink: 0;
+.nav-utilities {
 	background-color: var(--c-main-light);
-	padding: 2rem;	
-	height: calc(100vh - var(--nav-utilities-height));
-	display: flex;
-	align-items: center;
-	flex-direction: column;
-	gap: 2rem;
+	padding: .6rem 4rem;
+
+	ul {
+		display: flex;
+		align-items: center;
+		justify-content: flex-end;
+		gap: 2rem;
+	}
 }

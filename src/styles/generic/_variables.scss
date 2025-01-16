@@ -24,6 +24,7 @@
 
     // Red
     --c-red-500: #f94e4e;
+    --c-red-600: #eb496b;
     --c-red-700: #dc3939;
 
     // Gray
@@ -37,12 +38,14 @@
     // Theme colors
     --c-main: var(--c-blue);
     --c-main-light: var(--c-blue-100);
+    --c-main-blue: var(--c-blue-500);
     --c-main-bg: var(--c-gray-100);
     --c-text: var(--c-gray-900);
 
     &[data-theme="dark"] {
         --c-main: var(--c-gray-900);
         --c-main-bg: var(--c-gray-910);
+        --c-main-blue: var(--c-blue-800);
         --c-main-light: var(--c-gray-600);
         --c-text: var(--c-white);
     }

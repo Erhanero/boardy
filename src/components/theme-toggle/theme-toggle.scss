@@ -4,13 +4,13 @@
 
 .theme-toggle {
 	border-radius: 50%;
-	width: 3.4rem;
-	height: 3.4rem;
-	padding: .8rem;
+	width: 3.2rem;
+	height: 3.2rem;
+	padding: .5rem;
 	transition: background-color var(--t-duration);
 	
 	&:hover {
-		background-color: var(--c-blue-700);		
+		background-color: var(--c-main-blue);		
 	}
 
 	&:hover svg {

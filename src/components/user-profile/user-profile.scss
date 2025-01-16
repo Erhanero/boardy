@@ -1,0 +1,19 @@
+// ==========================================================================
+// User profile
+// ==========================================================================
+
+.user-profile {
+
+	&__avatar {
+		font-size: 1.4rem;
+		width: 3.2rem;
+		height: 3.2rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: 50%;
+		font-weight: 500;
+		color: var(--c-white);
+		background-color: var(--c-red-600);
+	}
+}

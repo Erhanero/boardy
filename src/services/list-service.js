@@ -122,7 +122,8 @@ const listService = {
             where('position', '>', deletedPosition)
         );
         
-        const listsToUpdate = await getDocs(listsQuery);          
+        const listsToUpdate = await getDocs(listsQuery);     
+        
        return Promise.all(
             listsToUpdate.docs.map(listDoc => 
                 updateDoc(doc(db, 'lists', listDoc.id), {
@@ -131,25 +132,6 @@ const listService = {
             )
         );
     },
-
-    /**
-     * Update lists positions.
-     * 
-     * @param {Array} lists 
-     * @returns {Promise<void>}
-     */
-    async updateListsPositions(lists) {
-        const batch = writeBatch(db);
-        
-        lists.forEach((list, index) => {
-            const listRef = doc(db, 'lists', list.id);
-            batch.update(listRef, {
-                position: index
-            });
-        });
-
-        return batch.commit();
-    }
 };
 
 export default listService;

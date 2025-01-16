@@ -95,7 +95,7 @@ const FormRegister = () => {
 			))}
 
 			<div className="form__group">
-				<p className="text-xs text-center">Already have an account? <Link to="/login" className="text-blue">Log in here</Link></p>
+				<p className="text-xs text-center text-dark">Already have an account? <Link to="/login" className="text-blue">Log in here</Link></p>
 			</div>
 		</Form >
 	)

@@ -15,9 +15,6 @@ const ListBoardSkeleton = ({ count = 4 }) => {
                 <div 
                     key={index}
 					className="list-board"
-					style={{
-						backgroundColor: '#cdcdcd'
-					}}
                 >
                     <div className="list__head">
                         <Skeleton width={150} height={24} />

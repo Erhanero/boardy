@@ -1,3 +1,6 @@
+/**
+ * External dependencies.
+ */
 import classNames from 'classnames';
 
 const StackItem = (props) => {

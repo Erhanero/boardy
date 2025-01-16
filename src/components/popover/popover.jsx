@@ -19,6 +19,7 @@ const Popover = (props) => {
 	const triggerRef = useRef(null);
 
 	const togglePopover = () => setIsOpen(!isOpen);
+
 	const closePopover = () => {
 		setIsOpen(false);
 		onClose && onClose();
@@ -59,16 +60,16 @@ const Popover = (props) => {
 		let newPosition = positions[position];
 
 		// Check if the popover is out of screen
-		if (newPosition.left + popoverRect.width > window.innerWidth) {
-			newPosition.left = window.innerWidth - popoverRect.width - 10; // 10px margin
+		if (newPosition.left + popoverRect.width > window.innerWidth) {			
+			newPosition.left = window.innerWidth - popoverRect.width - 30; // 30px margin
 		} else if (newPosition.left < 0) {
-			newPosition.left = 10; // 10px margin
+			newPosition.left = 30; // 30px margin
 		}
 
 		if (newPosition.top + popoverRect.height > window.innerHeight) {
-			newPosition.top = window.innerHeight - popoverRect.height - 10; // 10px margin
+			newPosition.top = window.innerHeight - popoverRect.height - 30; // 30px margin
 		} else if (newPosition.top < 0) {
-			newPosition.top = 10; // 10px margin
+			newPosition.top = 30; // 30px margin
 		}
 
 		return newPosition;
@@ -103,13 +104,11 @@ const Popover = (props) => {
 		}
 
 		const position = getPopoverPosition();
+
 		if (position) {
 			popoverRef.current.style.top = `${position.top}px`;
 			popoverRef.current.style.left = `${position.left}px`;
 		}
-
-		const input = popoverRef.current.querySelector('input');
-		input?.focus();
 
 	}, [isOpen]);
 

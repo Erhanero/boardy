@@ -128,7 +128,7 @@ blockquote:last-child {
 }
 
 .bg-blue {
-    background-color: var(--c-blue-500);
+    background-color: var(--c-main-blue);
 }
 
 .text-sm {
@@ -150,3 +150,17 @@ blockquote:last-child {
 .text-blue {
     color: var(--c-blue-500);
 }
+
+.text-dark {
+    color: var(--c-gray-900);
+}
+
+[data-theme='dark'] .react-loading-skeleton {
+    --base-color: #333333;
+    --highlight-color: #444444;
+  }
+  
+  [data-theme='light'] .react-loading-skeleton {
+    --base-color: #efebeb;
+    --highlight-color: #ffffff;
+  }

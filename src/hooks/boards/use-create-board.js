@@ -21,9 +21,10 @@ const useCreateBoard = () => {
      * @returns {Promise<void>}
      */
     const createBoard = async (data) => {
+        setIsLoading(true);
+        setError(null);
+
         try {
-            setIsLoading(true);
-            setError(null);
 
 			const newBoard = await boardService.createBoard(data, user.uid);
 			return newBoard;

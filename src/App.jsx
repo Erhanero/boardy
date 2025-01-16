@@ -16,8 +16,6 @@ function App() {
     return (
         <ThemeProvider>
             <SkeletonTheme
-                baseColor="#efebeb"
-                highlightColor="#fff"
             >
                 <AuthProvider>
                     <Router />

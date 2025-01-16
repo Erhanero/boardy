@@ -9,16 +9,21 @@ import { Outlet } from 'react-router-dom';
 import Sidebar from '@/components/sidebar/sidebar';
 import Stack from '@/components/stack/stack';
 import MainContent from '@/components/main-content/main-content';
+import NavUtilities from '@/components/nav-utilities/nav-utilities';
 
 const MainLayout = () => {
 	return (
-		<Stack>
-			<Sidebar />
+		<>
+			<NavUtilities />
 
-			<MainContent>				
-				<Outlet />
-			</MainContent>
-		</Stack>
+			<Stack>
+				<Sidebar />
+
+				<MainContent>
+					<Outlet />
+				</MainContent>
+			</Stack>
+		</>
 	);
 }
 

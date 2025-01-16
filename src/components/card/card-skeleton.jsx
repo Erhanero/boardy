@@ -6,8 +6,7 @@ import Skeleton from 'react-loading-skeleton';
 const CardSkeleton = () => {
 	return (
 		<div
-			className="card"
-			style={{ backgroundColor: '#c6c6c6' }}
+			className="card card--skeleton"
 		>
 			<div className="card__head">
 				<Skeleton width={120} />

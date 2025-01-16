@@ -5,7 +5,7 @@
 .section {	
 	display: flex;
 	flex-direction: column;
-	height: 100%;
+	height: calc(100vh - var(--nav-utilities-height));
 
 	.section__head {
 		padding: 2rem 4rem;		

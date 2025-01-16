@@ -71,7 +71,7 @@ const FormLogin = () => {
 			))}
 
 			<div className="form__group">
-				<p className="text-xs text-center">Don't have an account? <Link to="/register" className="text-blue">Click here to register.</Link></p>
+				<p className="text-xs text-center text-dark">Don't have an account? <Link to="/register" className="text-blue">Click here to register.</Link></p>
 			</div>
 		</Form >
 	)

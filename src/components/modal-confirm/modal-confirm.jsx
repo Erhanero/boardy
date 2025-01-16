@@ -1,6 +1,7 @@
 /**
  * External dependencies.
  */
+import { useState, useCallback } from 'react';
 import Modal from '@/components/modal/modal';
 import Button from '@/components/button/button';
 
@@ -12,6 +13,26 @@ const ModalConfirm = (props) => {
 		title,
 		message
 	} = props;
+    const [isProcessing, setIsProcessing] = useState(false);
+
+    /**
+     * Handle confirm.
+     * 
+     * @returns {Void}
+     */
+    const handleConfirm = useCallback(async () => {
+        try {
+            setIsProcessing(true);
+            await onConfirm();
+            onClose();
+
+        } catch (error) {
+            console.error(error);
+            
+        } finally {
+            setIsProcessing(false);
+        }
+    }, [onConfirm, onClose]);
 
     return (
         <Modal isOpen={isOpen} onClose={onClose} title={title}>
@@ -23,7 +44,7 @@ const ModalConfirm = (props) => {
                         Cancel
                     </Button>
                     
-                    <Button onClick={onConfirm} variant="red">
+                    <Button onClick={handleConfirm} disabled={isProcessing} variant="red">
                         Delete
                     </Button>
                 </div>

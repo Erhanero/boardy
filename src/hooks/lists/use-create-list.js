@@ -20,10 +20,10 @@ const useCreateList = () => {
 	 * @returns {Promise<void>}
 	 */
 	const createList = async (data, boardId) => {
+		setIsLoading(true);
+		setError(null);
+		
 		try {
-			setIsLoading(true);
-			setError(null);
-
 			const list = await listService.createList(data, boardId);
 			return list;
 

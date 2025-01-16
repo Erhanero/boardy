@@ -61,3 +61,9 @@
         color: var(--c-white);
     }
 }
+
+[data-theme="dark"] .form--alt {
+    .form__label {
+        color: var(--c-gray-900);
+    }
+}

@@ -9,7 +9,7 @@ import { NavLink, useLocation } from 'react-router-dom';
 import { useLogout } from '@/hooks/auth/use-logout';
 import { useAuth } from '@/contexts/auth';
 import Popover from '@/components/popover/popover';
-import FormAddBoard from '@/components/form-add-board/form-add-board';
+import FormCreateBoard from '@/components/form-create-board/form-create-board';
 
 const Nav = () => {
 	const { logout } = useLogout();
@@ -30,7 +30,7 @@ const Nav = () => {
 						<span className="nav__text">Create board</span>
 					</button>}
 				>
-					<FormAddBoard/>
+					<FormCreateBoard/>
 
 				</Popover>
 					
