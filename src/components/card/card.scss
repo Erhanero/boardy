@@ -50,6 +50,7 @@
 
 .card.is-dragging {
 	background-color: var(--c-blue-200);
+	pointer-events: none;
 
 	> * {
 		opacity: 0;
@@ -74,5 +75,9 @@
 
 	&:hover {
 		background-color: var(--c-blue-700);
+	}
+
+	&.is-dragging {
+		background-color: var(--c-blue-200);
 	}
 }
