@@ -12,12 +12,14 @@ import Stack from '@/components/stack/stack';
 import Button from '@/components/button/button';
 import Modal from '@/components/modal/modal';
 import FormCard from '@/components/form-card/form-card';
+import { useModal } from '@/contexts/modal';
 
 const Cards = ({ cards = [], listId, boardId }) => {
     const [showModal, setShowModal] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false);
     const [selectedCard, setSelectedCard] = useState(null);
     const cardsIds = useMemo(() => cards.map(card => card.id), [cards]); 
+    const [isModalOpen] = useModal();
     
     /**
      * Card click handler.
@@ -53,7 +55,7 @@ const Cards = ({ cards = [], listId, boardId }) => {
 
     return (
         <div className="cards">
-            <SortableContext items={cardsIds} strategy={verticalListSortingStrategy}>
+            <SortableContext items={cardsIds} strategy={verticalListSortingStrategy} disabled={isModalOpen}>
                 {cards.length > 0 && (
                     <div className="cards__inner">
                         <Stack direction="column" alignItems="normal" rowGap="12">

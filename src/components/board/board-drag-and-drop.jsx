@@ -1,4 +1,14 @@
-import { useState, useRef, useCallback, useEffect } from 'react';
+/**
+ * External dependencies.
+ */
+import
+React,
+{
+	useState,
+	useRef,
+	useCallback,
+	useEffect,
+} from 'react';
 import {
 	DndContext,
 	DragOverlay,
@@ -6,12 +16,17 @@ import {
 	useSensor,
 	PointerSensor,
 	pointerWithin,
-	rectIntersection,
 	closestCenter,
 	MeasuringStrategy,
 } from '@dnd-kit/core';
 import { arrayMove } from '@dnd-kit/sortable';
 import { createPortal } from 'react-dom';
+import { doc } from 'firebase/firestore';
+import { db } from '@/services/firebase';
+
+/**
+ * Internal dependencies.
+*/
 import ListBoard from '@/components/list-board/list-board';
 import Card from '@/components/card/card';
 import { findCardsByListId, findListById } from '@/utils/find-data';
@@ -19,16 +34,20 @@ import { findCardsByListId, findListById } from '@/utils/find-data';
 const BoardDragAndDrop = ({
 	boardId,
 	lists,
-	cards,
+	cards: initialCards,
 	updateListPosition,
 	reorderCardsInList,
 	moveCardBetweenLists,
-	updateCardListId,
 	children
 }) => {
 	const [draggingList, setDraggingList] = useState(null);
 	const [draggingCard, setDraggingCard] = useState(null);
+	const [localCards, setLocalCards] = useState(initialCards);
 	const originalListIdRef = useRef(null);
+
+	useEffect(() => {
+		setLocalCards(initialCards);
+	}, [initialCards]);
 
 	const sensors = useSensors(
 		useSensor(PointerSensor, {
@@ -94,10 +113,10 @@ const BoardDragAndDrop = ({
 			return;
 		}
 
-		const activeCards = findCardsByListId(cards, activeList.id);
+		const activeCards = findCardsByListId(localCards, activeList.id);
 		const overCards = activeList.id === overList.id
 			? activeCards
-			: findCardsByListId(cards, overList.id);
+			: findCardsByListId(localCards, overList.id);
 
 		const activeCardIndex = activeCards.findIndex(card => card.id === activeCard.id);
 		const overCardIndex = overCards.findIndex(card => card.id === overCard.id);
@@ -106,13 +125,13 @@ const BoardDragAndDrop = ({
 		try {
 			if (isSameList) {
 				const updatedCards = arrayMove(activeCards, activeCardIndex, overCardIndex);
-				reorderCardsInList(updatedCards);
+				await reorderCardsInList(updatedCards);
 
 			} else {
 				const [movedCard] = activeCards.splice(activeCardIndex, 1);
 				overCards.splice(overCardIndex, 0, movedCard);
 
-				moveCardBetweenLists(overCards, {
+				await moveCardBetweenLists(overCards, {
 					activeCard,
 					overCardIndex,
 					overList
@@ -140,12 +159,54 @@ const BoardDragAndDrop = ({
 		const isOverACard = over?.data?.current.type === 'Card';
 
 		if (isOverAList && !isActiveACard) {
-			return updateListOrder(active, over);
+			 return await updateListOrder(active, over);
 		}
 
 		if (isOverACard) {
-			return updateCardOrder(active, over);
+			return await updateCardOrder(active, over);
 		}
+	}
+
+	/**
+	 * Move card between cards.
+	 * 
+	 * @param {Array} cards 
+	 * @param {Number} activeIndex 
+	 * @param {String} overId 
+	 * @returns {Array}
+	 */
+	const moveCardBetweenCards = (cards, activeIndex, overId) => {
+		const overIndex = cards.findIndex(card => card.id === overId);
+		const updatedCards = [...cards];
+
+		updatedCards[activeIndex] = {
+			...updatedCards[activeIndex],
+			listId: cards[overIndex].listId
+		};
+
+		return arrayMove(updatedCards, activeIndex, overIndex);
+	}
+
+	/**
+	 * Move card to empty list.
+	 * @param {Array} cards 
+	 * @param {Number} activeIndex 
+	 * @param {String} listId 
+	 * @returns {Array}
+	 */
+	const moveCardToEmptyList = (cards, activeIndex, listId) => {
+		const hasCardsInList = cards.some(card => card.listId.id === listId);
+		if (hasCardsInList) {
+			return cards;
+		};
+
+		const updatedCards = [...cards];
+		updatedCards[activeIndex] = {
+			...updatedCards[activeIndex],
+			listId: doc(db, 'lists', listId)
+		};
+
+		return arrayMove(updatedCards, activeIndex, cards.length);
 	}
 
 	/**
@@ -160,19 +221,31 @@ const BoardDragAndDrop = ({
 			return;
 		}
 
-		const isActiveACard = active?.data.current?.type === 'Card';
-		const isOverACard = over?.data.current?.type === 'Card';
+		const isDraggingCard = active?.data.current?.type === 'Card';
+		const isHoveringOverCard = over?.data.current?.type === 'Card';
+		const isHoveringOverList = over?.data.current?.type === 'List';
 
-		if (isActiveACard) {
-			const newListId = isOverACard ? over?.data.current.listId : over.id;
+		setLocalCards((cards) => {
+			const activeIndex = cards.findIndex(card => card.id === active.id);
 
-			if (newListId && active?.data.current.listId !== newListId) {
-				active.data.current.listId = newListId;
-                updateCardListId(active.id, newListId);
+			if (isDraggingCard && isHoveringOverCard) {
+				return moveCardBetweenCards(cards, activeIndex, over.id);
 			}
-		}
+
+			if (isDraggingCard && isHoveringOverList) {
+				return moveCardToEmptyList(cards, activeIndex, over.id);
+			}
+
+			return cards;
+		});
 	}
 
+	/**
+	 * Custom Collision detection algorithm.
+	 * 
+	 * @param {Object} args
+	 * @returns {Function}
+	 */
 	const customCollisionDetectionAlgorithm = useCallback((args) => {
 		const { active, droppableContainers } = args;
 
@@ -185,39 +258,7 @@ const BoardDragAndDrop = ({
 			});
 		}
 
-		const pointerIntersections = pointerWithin(args);
-		const intersections = pointerIntersections.length > 0
-			? pointerIntersections
-			: rectIntersection(args);
-
-		let overId = intersections[0]?.id;
-
-		if (overId) {
-			const overContainer = droppableContainers.find(container => container.id === overId);
-			const overData = overContainer?.data.current;
-
-			if (overData?.type === 'List') {
-				const listIntersection = closestCenter({
-					...args,
-					droppableContainers: droppableContainers.filter(container =>
-						container.data.current?.type === 'Card' &&
-						container.data.current?.listId === overId
-					)
-				});
-
-				if (listIntersection.length > 0) {
-					return listIntersection;
-				}
-
-				return [{ id: overId }];
-			}
-
-			if (overData?.type === 'Card') {
-                return [{id: overId}];
-            }
-		}
-
-		return intersections;
+		return pointerWithin(args);
 	}, []);
 
 	return (
@@ -233,7 +274,9 @@ const BoardDragAndDrop = ({
 				}
 			}}
 		>
-			{children}
+			{React.Children.map(children, child =>
+				React.cloneElement(child, { cards: localCards })
+			)}
 
 			{createPortal(
 				<DragOverlay>
@@ -241,7 +284,7 @@ const BoardDragAndDrop = ({
 						<ListBoard
 							list={draggingList}
 							boardId={boardId}
-							cards={findCardsByListId(cards, draggingList.id)}
+							cards={findCardsByListId(localCards, draggingList.id)}
 						/>
 					)}
 
