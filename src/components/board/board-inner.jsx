@@ -9,10 +9,12 @@ import { SortableContext } from '@dnd-kit/sortable';
 import ListBoard from '@/components/list-board/list-board';
 import { findCardsByListId } from '@/utils/find-data';
 import ListBoardSkeleton from '@/components/list-board/list-board-skeleton';
+import { useModal } from '@/contexts/modal';
 
 const BoardInner = (props) => {
 	const { boardId, lists, isListsLoading, cards } = props;
 	const listsIds = lists.map(list => list.id);
+	const [isModalOpen] = useModal();
 
 	return (
 		<Stack className="board__inner" alignItems="flex-start" columnGap="20">
@@ -20,7 +22,7 @@ const BoardInner = (props) => {
 				? <ListBoardSkeleton />
 
 				: <>
-					<SortableContext items={listsIds}>
+					<SortableContext items={listsIds} disabled={isModalOpen}>
 						{lists.map((list) => (
 							<ListBoard
 								boardId={boardId}

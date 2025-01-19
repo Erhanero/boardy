@@ -10,29 +10,32 @@ import { SkeletonTheme } from 'react-loading-skeleton';
 import Router from '@/router';
 import { AuthProvider } from '@/contexts/auth';
 import { ThemeProvider } from '@/contexts/theme';
+import { ModalProvider } from '@/contexts/modal';
 
 function App() {
 
     return (
-        <ThemeProvider>
-            <SkeletonTheme
-            >
-                <AuthProvider>
-                    <Router />
-                </AuthProvider>
+        <ModalProvider>
+            <ThemeProvider>
+                <SkeletonTheme
+                >
+                    <AuthProvider>
+                        <Router />
+                    </AuthProvider>
 
-                <Toaster
-                    position="top-center"
-                    toastOptions={{
-                        duration: 3000,
-                        style: {
-                            background: '#056dd4',
-                            color: '#fff',
-                        },
-                    }}
-                />
-            </SkeletonTheme>
-        </ThemeProvider>
+                    <Toaster
+                        position="top-center"
+                        toastOptions={{
+                            duration: 3000,
+                            style: {
+                                background: '#056dd4',
+                                color: '#fff',
+                            },
+                        }}
+                    />
+                </SkeletonTheme>
+            </ThemeProvider>
+        </ModalProvider>
     );
 }
 
